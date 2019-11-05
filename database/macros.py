@@ -21,7 +21,7 @@ def to_num(int_to_check, error_msg = None, if_float = False, round_decimal = Non
 
 def yes_or_no(prompt, error_msg = None):
     while True:
-        check = input(f"{prompt} (Yes/No): ").strip()
+        check = input(f"{prompt} (Y/N): ").strip()
         if check.lower() == "n" or check.lower() == "no":
             return False
         elif check.lower() == "y" or check.lower() == "yes":

@@ -1,3 +1,7 @@
 {
-    "python.pythonPath": "C:\\Users\\Henggy\\AppData\\Local\\Programs\\Python\\Python38-32\\python.exe"
+    "python.pythonPath": "C:\\Users\\Wooniety\\AppData\\Local\\Programs\\Python\\Python38\\python.exe",
+    "python.linting.pylintEnabled": true,
+    "mpm.keypress": 2,
+    "mpm.hardMode": false,
+    "mpm.enabled": false,
 }

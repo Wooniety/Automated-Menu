@@ -13,10 +13,12 @@ for cat in categories:
     sorted_stuff[cat] = each_cat
 
 
-frozen = sorted_stuff[categories[1]]
+frozen = sorted_stuff[categories[0]]
 frozen_items = frozen[['Item', 'Price']]
-for item, row in frozen_items.iterrows():
-    print(f"{item}) {row['Item']}   ${row['Price']}")
+for i, item in enumerate(frozen.values):
+    print(f"{i+1}) {item[1]} {item[2]}")
+# for item, row in frozen_items.iterrows():
+#     print(f"{item}) {row['Item']}   ${row['Price']}")
 # for item in frozen_items:
 #    print(item)
 # print(frozen['Item', 'Price'])

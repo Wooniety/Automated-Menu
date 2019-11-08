@@ -1,5 +1,4 @@
 from database.macros import *
-from database.user_functions import *
 
 class Menu:
     def __init__(self, *options):

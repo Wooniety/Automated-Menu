@@ -1,3 +1,8 @@
+#Stuff I was hoping to import
+from datetime import datetime
+from os import system, name
+from time import sleep
+
 def to_num(int_to_check, error_msg = None, if_float = False, round_decimal = None): #string to num. Leave if_float empty if you want an int returned. Error msg also customizable 
     not_num = True
     while not_num:
@@ -28,3 +33,14 @@ def yes_or_no(prompt, error_msg = None):
             return True
         elif error_msg != None:
             print(error_msg)
+
+def clear(): 
+    # for windows 
+    if name == 'nt': 
+        _ = system('cls') 
+    # for mac and linux
+    else: 
+        _ = system('clear') 
+
+def get_day():
+    return datetime.today().strftime('%A')

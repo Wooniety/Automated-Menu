@@ -1,16 +1,19 @@
+class Shopping:
+    def __init__(self):
+        self.name = "Explore the shopping aisle"
+
 class Shopping_Cart:
     def __init__(self):
-        self.name = ""
-        self.cart = {}
+        self.cart = pd.DataFrame(columns=["Items", "Quantity"])
     
     def add_to_cart(self, item){
-        if item in self.cart:
+        if item in self.cart.index:
             self.cart[item] = self.cart[item]+1
         else:
             self.cart[item] = 1
     
     def remove_from_cart(self, item):
-        if item in self.cart:
+        if item in self.cart.index:
             if self.cart[item] == 1:
                 del self.cart[item]
             else:

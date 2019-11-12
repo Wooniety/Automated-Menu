@@ -1,5 +1,6 @@
 # from database.user_functions import *
 from database.macros import *
+
 class Menu:
     def __init__(self, menu_msg = None, *options):
         self.menu_msg = menu_msg
@@ -22,12 +23,14 @@ class Menu:
             else:
                 clear()
                 print("Find something to do")
-            for option in sorted(self.options):
+
+            for option in sorted(self.options): # Print out available options
                 print(f"{option}: {self.options[option].name}")
             user_choice = input("\nPlease enter an option: ").strip()
+
             if user_choice == "":
                 print("No option selected.\n")
-            elif user_choice in self.options:
+            elif user_choice in self.options: #If user types in option number
                 return user_choice
             else:
                 options_exists = False
@@ -38,24 +41,37 @@ class Menu:
                         else:
                             options_exists = True
                             continue
-                if options_exists == False:
+                if options_exists == False: # Can't do else because 'continue' would still trigger else
                     print(f"Sorry. I'm not sure what you mean by '{user_choice}'") 
                     sleep(1) #Show for a second before clearing screen
 
-class Leave_Mall:
-    def __init__(self):
-        self.name = "Leave Mall"
+class Menu_Functions:
+    def __init__(self, *options): # Menu_Functions(option_name, function) 
+        self.options = {} # option_name: function
+        self.option_num = {} # option_num: function
+        for i in range(0, len(options), 2):
+            self.options[options[i]] = options[i+1] 
+            self.option_num[f"{i}"] = options[i+1]
     
-    def action(self):
-        clear()
-        exit(0)
-
-class Login_Register: #Not in use yet
-    def __init__(self):
-        self.name = "Login/Register"
-        self.username = "User"
-        self.password = "Password"
-    
-    def action(self):
-        clear()
-        exit(0)
+    def show_functions(self, msg = None):
+        for i, option in enumerate(self.options):
+            print(f"{i}) {option}")
+        if msg == None:
+            msg == "Please pick an option\n"
+        print("\n")
+        while True:
+            choice = input(f"{msg}")
+            if choice == "":
+                print("No option selected")
+            elif choice.isnumeric():
+                if choice in self.option_num:
+                    self.option_num[choice]
+                    return
+                else:
+                    print("Invalid option!")
+            else:
+                if choice in self.options:
+                    self.options[choice]
+                    return
+                else:
+                    print("Invalid option!")

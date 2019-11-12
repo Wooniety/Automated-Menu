@@ -18,6 +18,8 @@ frozen_items = frozen[['Item', 'Price']]
 for i, item in enumerate(frozen.values):
     print(f"{i+1}) {item[1]} {item[2]}")
 
+print(f"\n{frozen}")
+
 def addItemIntoMenu(items, df):
     '''
     items is a list [[category, item, price, stock], ...[]]
@@ -27,8 +29,8 @@ def addItemIntoMenu(items, df):
     df = df.append(items_to_add, ignore_index = True)
     return df
 
-menu = addItemIntoMenu([['Drinks', 'Sprite', 10, 10]], menu)
-print(menu)
+#menu = addItemIntoMenu([['Drinks', 'Sprite', 10, 10]], menu)
+#print(menu)
 
 # Reading out dataframes with paths
 menu.to_csv('data/menu.csv', index = False)

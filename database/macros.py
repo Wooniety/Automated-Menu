@@ -44,3 +44,4 @@ def clear():
 
 def get_day():
     return datetime.today().strftime('%A')
+

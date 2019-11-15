@@ -1,6 +1,5 @@
 # Import stuff
 import os
-import xlrd 
 import pandas as pd
 
 # Ensure code is being run in SPAM-MENU
@@ -11,10 +10,8 @@ os.chdir(SPAM_folder)
 from database.common_menu import *
 from database.stock import *
 
-stock = Stock()
-
 # Default Menu options
-class Leave_Mall:
+class LeaveMall:
     def __init__(self):
         self.name = "Leave Mall"
     
@@ -22,7 +19,7 @@ class Leave_Mall:
         clear()
         exit(0)
 
-class Login_Register: #Not in use yet
+class LoginRegister: #Not in use yet
     def __init__(self):
         self.name = "Login/Register"
         self.username = "User"
@@ -35,13 +32,14 @@ class Login_Register: #Not in use yet
 def main():
     clear()
     msg = "Hi this is the Krusty Krab Shopping Mart. Mr Krabs lost Spongebob and couldn't continue running the other one so he started a shopping mall to overcome his depression.\n"
-    main_menu = Menu(msg, "0", Leave_Mall())
-    main_menu.add_menu("1", Login_Register())
-    main_menu.add_menu("3", Stock())
+    main_menu = Menu(msg, "0", LeaveMall())
+    main_menu.add_menu("1", LoginRegister())
+    main_menu.add_menu("2", Stock())
     while True:
         choice = main_menu.show_menu()
         main_menu.options[choice].action()
 
+# Main loop
 main()
 """
     main_menu.add_menu( "1", "Login/Register" 

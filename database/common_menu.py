@@ -1,5 +1,5 @@
 # from database.user_functions import *
-from database.macros import *
+from database.utils import *
 
 class Menu:
     def __init__(self, menu_msg = None, *options):
@@ -43,35 +43,33 @@ class Menu:
                             continue
                 if options_exists == False: # Can't do else because 'continue' would still trigger else
                     print(f"Sorry. I'm not sure what you mean by '{user_choice}'") 
-                    sleep(1) #Show for a second before clearing screen
+                    sleep(1) # Show for a second before clearing screen
 
-class Menu_Functions:
+class MenuFunctions:
     def __init__(self, *options): # Menu_Functions(option_name, function) 
-        self.options = {} # option_name: function
-        self.option_num = {} # option_num: function
+        self.options = {"Exit": self.exit} # option_name: function;
+        self.option_num = {"0": self.exit} # option_num: function
         for i in range(0, len(options), 2):
             self.options[options[i]] = options[i+1] 
-            self.option_num[f"{i}"] = options[i+1]
-    
-    def show_functions(self, msg = None):
-        for i, option in enumerate(self.options):
-            print(f"{i}) {option}")
-        if msg == None:
-            msg == "Please pick an option\n"
-        print("\n")
+            self.option_num[f"{int(i-i/2+1)}"] = options[i+1]
+
+    def exit(self):
+        pass
+
+    def show_functions(self, function_msg = f"{print_banner()}\n", input_msg = "\nPlease enter an option: "):
         while True:
-            choice = input(f"{msg}")
+            clear()
+            print(print_banner())
+            for i, option in enumerate(self.options):
+                print(f"{i}) {option}")
+            choice = input(f"{input_msg}").strip().lower()
+            if choice == "exit" or choice == "0":
+                return
             if choice == "":
                 print("No option selected")
-            elif choice.isnumeric():
-                if choice in self.option_num:
-                    self.option_num[choice]
-                    return
-                else:
-                    print("Invalid option!")
+            if choice in self.option_num:
+                self.option_num[choice]()
+            elif choice in self.options:
+                self.options[choice]()
             else:
-                if choice in self.options:
-                    self.options[choice]
-                    return
-                else:
-                    print("Invalid option!")
+                print("Invalid option!")

@@ -1,5 +1,5 @@
 import pandas as pd
-from database.macros import *
+from database.utils import *
 
 class Shopping:
     def __init__(self):

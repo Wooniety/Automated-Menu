@@ -1,4 +1,5 @@
 #Stuff I was hoping to import
+import shutil
 from datetime import datetime
 from os import system, name
 from time import sleep
@@ -44,4 +45,11 @@ def clear():
 
 def get_day():
     return datetime.today().strftime('%A')
+
+def print_banner():
+    columns, rows = shutil.get_terminal_size(fallback=(80, 24))
+    header = "*"*rows
+    spaces = " "*int(rows/2-4)
+    banner = f"{header}\n{spaces}SPAM Menu\n{header}"
+    return banner
 

@@ -7,8 +7,10 @@ SPAM_folder = os.path.dirname(os.path.abspath(__file__))
 os.chdir(SPAM_folder)
 
 # Import database files
+from database.utils import *
 from database.common_menu import *
 from database.stock import *
+from database.shopping import *
 
 # Default Menu options
 class LeaveMall:
@@ -31,10 +33,12 @@ class LoginRegister: #Not in use yet
 
 def main():
     clear()
-    msg = "Hi this is the Krusty Krab Shopping Mart. Mr Krabs lost Spongebob and couldn't continue running the other one so he started a shopping mall to overcome his depression.\n"
+    msg = "Hi this is the Krusty Krab Shopping Mart. Mr Krabs lost Spongebob and couldn't continue running the other one so he started a shopping mall to overcome his depression."
     main_menu = Menu(msg, "0", LeaveMall())
     main_menu.add_menu("1", LoginRegister())
     main_menu.add_menu("2", Stock())
+    main_menu.add_menu("3", ExploreAisle())
+    main_menu.add_menu("4", ShoppingCart())
     while True:
         choice = main_menu.show_menu()
         main_menu.options[choice].action()
@@ -47,5 +51,4 @@ main()
                         "3", "Explore the shopping aisle", 
                         "4", "Search for specific item", 
                         "5", "Head to the cashier")
-    Admin functions: Stock()
 """

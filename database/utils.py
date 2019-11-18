@@ -1,4 +1,4 @@
-#Stuff I was hoping to import
+# Just utils stuff
 import shutil
 from datetime import datetime
 from os import system, name
@@ -25,7 +25,7 @@ def to_num(int_to_check, error_msg = None, if_float = False, round_decimal = Non
                     returned_num = round(returned_num*(10**round_decimal))/(10**round_decimal)
                 return returned_num
 
-def yes_or_no(prompt, error_msg = None):
+def yes_or_no(prompt, error_msg = None): # Prompt yes or no
     while True:
         check = input(f"{prompt} (Y/N): ").strip()
         if check.lower() == "n" or check.lower() == "no":
@@ -43,13 +43,23 @@ def clear():
     else: 
         _ = system('clear') 
 
-def get_day():
+def get_day(): # Return the day as a string
     return datetime.today().strftime('%A')
 
-def print_banner():
+def print_banner(section = "", msg = ""): # Header banner
+    mall_name = "Krusty Krabz"
     columns, rows = shutil.get_terminal_size(fallback=(80, 24))
-    header = "*"*rows
-    spaces = " "*int(rows/2-4)
-    banner = f"{header}\n{spaces}SPAM Menu\n{header}"
+    header = "*"*columns
+
+    if section != "":
+        mall_name = f"{mall_name} - {section}"
+    header_spaces = " "*int(columns/2-len(mall_name)/2)
+    if msg != "":
+        msg_spaces = " "*int(columns/2 - len(msg)/2)
+        mall_name = f"{mall_name}\n{msg_spaces}{msg}"
+
+    banner = f"\033[1;36;40m{header}\n\n{header_spaces}{mall_name}\n\n{header}\033[0;37;40m"
     return banner
 
+def enter_to_continue():
+    input("\nPress Enter to continue... ")

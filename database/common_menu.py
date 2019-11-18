@@ -17,12 +17,13 @@ class Menu:
 
     def show_menu(self):
         while True:
+            clear()
+            print_banner()
             if self.menu_msg != None:
-                print(self.menu_msg)
+                print(f"{print_banner()}As you approach the mall, a tired employee greets you.\n\nTired Employee: \"{self.menu_msg}\"\n")
                 self.menu_msg = None
             else:
-                clear()
-                print("Find something to do")
+                print("You stand at the entrance of the mall...\n")
 
             for option in sorted(self.options): # Print out available options
                 print(f"{option}: {self.options[option].name}")
@@ -56,10 +57,10 @@ class MenuFunctions:
     def exit(self):
         pass
 
-    def show_functions(self, function_msg = f"{print_banner()}\n", input_msg = "\nPlease enter an option: "):
+    def show_functions(self, function_msg = "", input_msg = "\nPlease enter an option: "):
         while True:
             clear()
-            print(print_banner())
+            print(print_banner(function_msg))
             for i, option in enumerate(self.options):
                 print(f"{i}) {option}")
             choice = input(f"{input_msg}").strip().lower()

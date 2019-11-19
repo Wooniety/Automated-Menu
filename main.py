@@ -44,7 +44,10 @@ def main():
         main_menu.options[choice].action()
 
 # Main loop
+clear_cart()
 main()
+clear_cart()
+
 """
     main_menu.add_menu( "1", "Login/Register" 
                         "2", "Get a shopping cart/basket", 

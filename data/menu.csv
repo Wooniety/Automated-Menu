@@ -1,7 +1,7 @@
-Category,Item,Price,Stock
-Drinks,Tea,2.0,17
-Frozen Goods,Chicken,2.5,10
-Drinks,Milk,2.5,13
-Sweets,Wheels,3.5,7
-Drinks,Milo,1.2,20
-Drinks,Sprite,10.0,10
+Item,Category,Price,Stock
+Tea,Drinks,2.0,17.0
+Chicken,Frozen Goods,2.5,10.0
+Milk,Drinks,2.5,13.0
+Wheels,Sweets,3.5,7.0
+Milo,Drinks,1.2,20.0
+Sprite,Drinks,10.0,10.0

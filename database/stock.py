@@ -3,7 +3,7 @@ from database.utils import *
 from database.common_menu import *
 
 
-# Use the functions in Stock to mess directly with the csv. If just reading e.g shopping cart, DO NOT USE 
+# Use the functions in Stock to mess directly with the csv. Shopping cart is seperate.
 
 class Stock: 
     def __init__(self):
@@ -14,19 +14,33 @@ class Stock:
         for category in self.categories:
             self.categories_data[category] = self.stock[self.stock['Category'] == category] 
 
-    def update_stock_df(self):
+    def updateStockDF(self):
         self.stock = pd.read_csv('data/menu.csv')
         self.categories = self.stock['Category'].unique()
         for category in self.categories_data:
             self.categories_data[category] = self.stock[self.stock['Category'] == category] 
 
-    def update_csv(self):
-        self.stock('data/menu.csv', index = False)
+    def updateStockCSV(self):
+        self.stock.to_csv('data/menu.csv', index = False)
 
-    def show_category(self, msg1 = "The following categories exist", msg2 = "Which category do you want to check?"):
-        clear()
-        print(print_banner("Choose a category"))
+    def removeStock(self):
+        pass
+
+    def addStock(self):
+        pass
+
+    def changeValue(self, value_column, value_row, new_value):
+        self.updateStockDF()
+        self.stock.at[value_row, value_column] = new_value
+        print(self.stock)
+        enter_to_continue()
+        self.updateStockCSV()
+
+    def showCategory(self, msg1 = "The following categories exist", msg2 = "Which category do you want to check?", return_df = True):
+        self.updateStockDF()
         while True:
+            clear()
+            print(print_banner("Choose a category"))
             categories = {}
             print(msg1)
             for i, category in enumerate(self.categories):
@@ -35,14 +49,23 @@ class Stock:
             category = input("\n" + msg2).strip()
             if category == "":
                 print("Please don't leave a blank!")
+                enter_to_continue()
+            elif category == "0":
+                return 0, 0
             elif categories[category] in self.categories_data:
-                return self.categories_data[categories[category]], self.categories[int(category)-1]
+                if return_df:
+                    return self.categories_data[categories[category]], self.categories[int(category)-1]
+                else:
+                    print(self.categories_data[categories[category]])
             else:
                 print("Category does not exist!\n")
 
-    def show_all(self):
+    def showAll(self):
+        self.updateStockDF()
         print(self.stock.to_string(index = False))
+        enter_to_continue()
         
     def action(self):
-        self.functions = MenuFunctions("Show all stocked items", self.show_all, "Show category", self.show_category)
+        self.updateStockDF()
+        self.functions = MenuFunctions("Show all stocked items", self.showAll, "Show category", self.showCategory)
         self.functions.show_functions(self.name)

@@ -16,13 +16,14 @@ class Menu:
         del self.options[key]
 
     def show_menu(self):
+        location = "Mall Entrance"
         while True:
             clear()
-            print_banner()
             if self.menu_msg != None:
-                print(f"{print_banner()}As you approach the mall, a tired employee greets you.\n\nTired Employee: \"{self.menu_msg}\"\n")
+                print(f"{print_banner(location)}As you approach the mall, a tired employee greets you.\n\nTired Employee: \"{self.menu_msg}\"\n")
                 self.menu_msg = None
             else:
+                print(print_banner(location))
                 print("You stand at the entrance of the mall...\n")
 
             for option in sorted(self.options): # Print out available options
@@ -30,7 +31,8 @@ class Menu:
             user_choice = input("\nPlease enter an option: ").strip()
 
             if user_choice == "":
-                print("No option selected.\n")
+                print("No option selected.")
+                enter_to_continue()
             elif user_choice in self.options: #If user types in option number
                 return user_choice
             else:
@@ -44,11 +46,11 @@ class Menu:
                             continue
                 if options_exists == False: # Can't do else because 'continue' would still trigger else
                     print(f"Sorry. I'm not sure what you mean by '{user_choice}'") 
-                    sleep(1) # Show for a second before clearing screen
+                    enter_to_continue()
 
 class MenuFunctions:
     def __init__(self, *options): # Menu_Functions(option_name, function) 
-        self.options = {"Exit": self.exit} # option_name: function;
+        self.options = {"Go back": self.exit} # option_name: function;
         self.option_num = {"0": self.exit} # option_num: function
         for i in range(0, len(options), 2):
             self.options[options[i]] = options[i+1] 
@@ -64,13 +66,12 @@ class MenuFunctions:
             for i, option in enumerate(self.options):
                 print(f"{i}) {option}")
             choice = input(f"{input_msg}").strip().lower()
-            if choice == "exit" or choice == "0":
+            if choice == "go back" or choice == "0":
                 return
-            if choice == "":
-                print("No option selected")
             if choice in self.option_num:
                 self.option_num[choice]()
             elif choice in self.options:
                 self.options[choice]()
             else:
                 print("Invalid option!")
+                enter_to_continue()

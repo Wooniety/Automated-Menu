@@ -63,6 +63,7 @@ class MenuFunctions:
         while True:
             clear()
             print(print_banner(function_msg))
+
             for i, option in enumerate(self.options):
                 print(f"{i}) {option}")
             choice = input(f"{input_msg}").strip().lower()

@@ -8,6 +8,22 @@ A small application about shopping in a mall.
 - Pandas Dataframe (If you're using Anaconda, this should already be installed.)
   - https://pandas.pydata.org/pandas-docs/stable/install.html
 
+## How to run
+
+If cloning from Github
+
+``` bash
+git clone https://github.com/Wooniety/SPAM-Menu
+cd SPAM-Menu
+python main.py
+```
+
+If already cloned:
+
+``` bash
+python {directory_to_folder}/SPAM-Menu/main.py
+```
+
 ## Features
 
 ### Login/Register
@@ -26,3 +42,9 @@ Explore the different isles with their varying items!
 
 - Frozen Goods
 - Drinks
+
+## Misc
+
+### Why Pandas?
+
+I wanted a nice way to display the menu without going into GUI so I figured the dataframe from Pandas would be a good idea. Also conveniently has some nice features like sum or merge.

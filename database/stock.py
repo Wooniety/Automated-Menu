@@ -8,32 +8,37 @@ from database.common_menu import *
 class Stock: 
     def __init__(self):
         self.name = "View stock"
-        self.stock = pd.read_csv('data/menu.csv')
-        self.categories = self.stock['Category'].unique()
+        self.stock_df = pd.read_csv('data/menu.csv')
+        self.categories = self.stock_df['Category'].unique()
         self.categories_data = {}
         for category in self.categories:
-            self.categories_data[category] = self.stock[self.stock['Category'] == category] 
+            self.categories_data[category] = self.stock_df[self.stock_df['Category'] == category] 
 
     def updateStockDF(self):
-        self.stock = pd.read_csv('data/menu.csv')
-        self.categories = self.stock['Category'].unique()
+        self.stock_df = pd.read_csv('data/menu.csv')
+        self.categories = self.stock_df['Category'].unique()
         for category in self.categories_data:
-            self.categories_data[category] = self.stock[self.stock['Category'] == category] 
+            self.categories_data[category] = self.stock_df[self.stock_df['Category'] == category] 
 
     def updateStockCSV(self):
-        self.stock.to_csv('data/menu.csv', index = False)
+        self.stock_df.to_csv('data/menu.csv', index = False)
 
-    def removeStock(self):
-        pass
+    def removeStock(self, item, num):
+        self.updateStockDF()
+        if item in self.stock_df:
+            self.stock_df.loc[self.cart['Item'] == item, 'Stock'] -= num
 
     def addStock(self):
         pass
 
-    def changeValue(self, value_column, value_row, new_value):
+    def getCell(self, value_row, value_column):
         self.updateStockDF()
-        self.stock.at[value_row, value_column] = new_value
-        print(self.stock)
-        enter_to_continue()
+        cell = self.stock_df.loc[self.stock_df['Item'] == value_row, value_column].values[0]
+        return cell
+
+    def changeValue(self, value_row, value_column, new_value):
+        self.updateStockDF()
+        self.stock_df.loc[self.stock_df['Item'] == value_row, value_column] = new_value
         self.updateStockCSV()
 
     def showCategory(self, msg1 = "The following categories exist", msg2 = "Which category do you want to check?", return_df = True):
@@ -45,7 +50,7 @@ class Stock:
             print(msg1)
             for i, category in enumerate(self.categories):
                 categories[f"{i+1}"] = category
-                print(f"{i+1} {category}")
+                print(f"{i+1}) {category}")
             category = input("\n" + msg2).strip()
             if category == "":
                 print("Please don't leave a blank!")
@@ -62,7 +67,7 @@ class Stock:
 
     def showAll(self):
         self.updateStockDF()
-        print(self.stock.to_string(index = False))
+        print(self.stock_df.to_string(index = False))
         enter_to_continue()
         
     def action(self):

@@ -37,13 +37,14 @@ class ExploreAisle:
             self.cart.refreshCartDF()
             # put items in aisle into a dictionary to select. 
             for i, item in enumerate(self.aisle_data.values):
-                category_items[f"{i+1}"] = [item[0], item[1], item[2]] #[Item, price, stock]
+                category_items[f"{i+1}"] = [item[0], item[1], int(item[2])] #[Item, price, stock]
             clear()
             print(print_banner(self.name, self.aisle_name))
             print("The items on the shelves stare back at you...")
-            print("0) Don't add item to cart")
+            print("0) Don't add item to cart\n")
+            print("   Items      Price   In stock")
             for i, item in enumerate(self.aisle_data.values):
-                print(f"{i+1}) {item[0]} {item[1]} {int(item[2])}")# While not exit
+                print(f"{i+1}) {item[0]}{get_spaces(10-len(item[0]))} {item[1]}{get_spaces(7-len(str(item[1])))} {int(item[2])}")# While not exit
             choice = input("\nAdd an item to cart?\n")
             clear()
             print(print_banner(self.name, self.aisle_name))
@@ -55,7 +56,7 @@ class ExploreAisle:
                 while True: # Check if valid number added to cart
                     clear()
                     print(print_banner(self.name, self.aisle_name))
-                    print(f"Selected item: \033[1;33;40m{category_items[choice][0]} ({int(category_items[choice][2])})\033[0;37;40m\n")
+                    print(f"Selected item: \033[1;33;40m{category_items[choice][0]} ({category_items[choice][2]})\033[0;37;40m\n")
                     amt = input("Number to add (0 to stop): ").strip()
 
                     if amt == "" :
@@ -78,6 +79,7 @@ class ExploreAisle:
                     pass
                 else:
                     to_cart = [[category_items[choice][0], amt, category_items[choice][1]]]
+                    category_items[choice][2] -= amt
                     self.cart.addItemToCart(to_cart)
                     print(f"Added {amt} {category_items[choice][0]} to cart")
                     enter_to_continue()

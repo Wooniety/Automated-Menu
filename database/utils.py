@@ -82,3 +82,7 @@ def clear_cart():
     cart_file = open("data/cart.csv", "w")
     cart_file.write('"Items","Quantity","Price"')
     cart_file.close()
+
+def get_spaces(length):
+    spaces = " "*length
+    return spaces

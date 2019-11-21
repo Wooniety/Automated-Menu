@@ -26,9 +26,40 @@ class LoginRegister: #Not in use yet
         self.name = "Login/Register"
         self.username = "User"
         self.password = "Password"
+        self.users = pd.read_csv("data/users.csv")
+    
+    def login(self):
+        pass
+
+    def register(self, admin = False):
+        clear()
+        print_banner(self.name, "Register")
+
+        user_prompts = ["Username: ", "Password: ", "Password again: "]
+        user_details = []
+        if admin == False:
+            user_details[3] = "customer"
+            print("Welcome! I see this is your first time here! Before we get into the program, please tell me a bit about yourself!")
+            while True:
+                for i in range(3):
+                    user_details[i] = input(user_prompts[i])
+                if user_details[1] != user_details[2]:
+                    print("Passwords do not match!")
+                else:
+                    for i, user in user_details:
+                        pass
+                    print(f"Welcome {user_details[0]}!")
+                    break
     
     def action(self):
-        clear()
+        while True:
+            clear()
+            print_banner(self.name)
+            choice = yes_or_no("Is this your first time here")
+            if choice:
+                self.register()
+            else:
+                self.login()
         exit(0)
 
 def main():
@@ -44,6 +75,8 @@ def main():
         main_menu.options[choice].action()
 
 # Main loop
+stock = Stock()
+stock.readStockFromOG()
 clear_cart()
 main()
 clear_cart()

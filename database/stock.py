@@ -14,22 +14,44 @@ class Stock:
         for category in self.categories:
             self.categories_data[category] = self.stock_df[self.stock_df['Category'] == category] 
 
-    def updateStockDF(self):
+    def readStockFromOG(self):
+        self.og_stock = pd.read_csv('data/stock.csv')
+        self.og_stock.to_csv('data/menu.csv', index = False)
+
+    def updateStockDF(self): # Temp stock dataframe
         self.stock_df = pd.read_csv('data/menu.csv')
         self.categories = self.stock_df['Category'].unique()
         for category in self.categories_data:
             self.categories_data[category] = self.stock_df[self.stock_df['Category'] == category] 
 
-    def updateStockCSV(self):
+    def updateStockCSV(self): # Updata temp stock. Updated to main stock when checking out.
         self.stock_df.to_csv('data/menu.csv', index = False)
+    
+    def updateActualStockCSV(self): 
+        # Update actual database stock. Only use when checking out
+        # That way if the user quits the program suddenly, stock reverts to normal
+        self.stock_df.to.csv('data/stock.csv', index = False)
 
     def removeStock(self, item, num):
         self.updateStockDF()
-        if item in self.stock_df:
-            self.stock_df.loc[self.cart['Item'] == item, 'Stock'] -= num
+        if item in self.all_items:
+            if self.getCell(item, 'Stock') - num >=0:
+                self.stock_df.loc[self.stock_df['Item'] == item, 'Stock'] -= num
+            else:
+                print("Too many!")
+        else:
+            print("Invalid input!")
+        self.updateStockCSV()
 
-    def addStock(self):
-        pass
+    def addStock(self, item): # [[item, category, price, num]]
+        self.updateStockDF()
+        self.all_items = self.stock_df['Item'].unique()
+        if item in self.all_items:
+            self.stock_df.loc[self.stock_df['Item'] == item[0][0], 'Quantity'] += item[0][3]
+        else:
+            items_to_add = pd.DataFrame(item, columns = self.stock_df.columns)
+            self.cart = self.cart.append(items_to_add, ignore_index = True)
+        self.updateStockDF()
 
     def getCell(self, value_row, value_column):
         self.updateStockDF()
@@ -48,6 +70,7 @@ class Stock:
             print(print_banner("Choose a category"))
             categories = {}
             print(msg1)
+            print("0) Go back")
             for i, category in enumerate(self.categories):
                 categories[f"{i+1}"] = category
                 print(f"{i+1}) {category}")
@@ -57,13 +80,14 @@ class Stock:
                 enter_to_continue()
             elif category == "0":
                 return 0, 0
-            elif categories[category] in self.categories_data:
+            elif category in categories:
                 if return_df:
                     return self.categories_data[categories[category]], self.categories[int(category)-1]
                 else:
                     print(self.categories_data[categories[category]])
             else:
                 print("Category does not exist!\n")
+                enter_to_continue()
 
     def showAll(self):
         self.updateStockDF()

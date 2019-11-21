@@ -106,7 +106,10 @@ class ShoppingCart:
             self.refreshCartDF()
             clear()
             print(print_banner("View Cart"))
-            self.viewCart(True)
+            cart, empty = self.viewCart(True)
+            print(cart)
+            if empty:
+                enter_to_continue()
             if self.cart_empty:
                 break
             else:
@@ -119,7 +122,7 @@ class ShoppingCart:
                         pass
                     elif choice in items_to_remove:
                         while True:
-                            amt = input("How many?\n")
+                            amt = input("How many?\n").strip()
                             if if_num(amt):
                                 amt = int(amt)
                                 if amt > len(self.items_in_cart) or amt < 0:
@@ -176,9 +179,24 @@ class ShoppingCart:
         self.cart.index += 1
         if self.cart.empty:
             self.cart_empty = True
-            print("There is nothing in the cart!")
-            enter_to_continue()
+            return "There is nothing in the cart!", True
         else:
             self.cart_empty = False
-            print(self.cart.to_string(index=show_index))
-            enter_to_continue()
+            return self.cart.to_string(index=show_index), False
+
+class Checkout:
+    def __init__(self):
+        self.name = "Checkout"
+        self.cart = ShoppingCart()
+    
+    def getTotalAmt(self):
+        self.total = self.cart.cart[['Price']].copy()
+        self.total = self.total.sum().sum()
+    
+    def action(self):
+        print_cart, empty = self.cart.viewCart()
+        print(print_cart)
+        print(f"Your total amount is: {self.total}")
+        choice = yes_or_no("Do you want to check out?")
+        if choice:
+            pass #TODO Logout

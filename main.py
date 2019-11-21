@@ -70,6 +70,7 @@ def main():
     main_menu.add_menu("2", Stock())
     main_menu.add_menu("3", ExploreAisle())
     main_menu.add_menu("4", ShoppingCart())
+    main_menu.add_menu("5", Checkout())
     while True:
         choice = main_menu.show_menu()
         main_menu.options[choice].action()

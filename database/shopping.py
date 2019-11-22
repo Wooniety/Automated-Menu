@@ -14,9 +14,6 @@ class ExploreAisle:
         self.name = "Explore the shopping aisle"
         self.stock = Stock()
         self.cart = ShoppingCart()
-    
-    def searchForItem(self):
-        pass #TODO
 
     def updateAisleData(self):
         self.stock.updateStockDF()
@@ -31,7 +28,7 @@ class ExploreAisle:
         print(print_banner(self.name))
 
         # Seperate the items into different dataframes for categories
-        self.aisle_data, self.aisle_name, self.category_num = self.stock.showCategory("You see a sign point to different aisles", "Which aisle do you go down?\n")
+        self.aisle_data, self.aisle_name, self.category_num = self.stock.showCategory("You see a sign point to different aisles", "Which aisle do you go down?\n", True)
         if self.aisle_name == 0:
             self.exit = False
         else:
@@ -103,6 +100,35 @@ class ExploreAisle:
             self.getItemFromAisle()
             self.exploreAisle()
             enter_to_continue()
+        return False
+
+class SearchItem:
+    def __init__(self):
+        self.name = "Search for item"
+        self.cart = ShoppingCart()
+        self.stock = Stock()
+
+    def action(self):
+        clear()
+        print(print_banner("The shopping aisles", "Search for item"))
+        find_item = input("Enter search query: ")
+        found_items = self.stock.searchStock(find_item)
+        if len(found_items) > 0:
+            print("You found the following things that match your search: ")
+            all_items = {}
+            for i, item in enumerate(found_items):
+                all_items[f"{i}"] = item
+                print(f"{i}) {item}")
+            choice = yes_or_no("Do you want to add it to your cart?")
+            if choice:
+                cart = ShoppingCart()
+                choose_item = input("Item number: ").strip()
+                amt = int(input("Amount: "))
+                choose_item = all_items[choose_item]
+                cart.addItemToCart([[choose_item, self.stock.getCell(choose_item, "Category"), self.stock.getCell(choose_item, "Price"), amt]])
+        else:
+            print("You couldn't find anything...")
+        enter_to_continue()
         return False
 
 class ShoppingCart:

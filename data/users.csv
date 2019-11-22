@@ -1,5 +1,11 @@
 username,password,account_type
-Wooniety,suspicious,Customer
-Techlead,Google,Admin
-Henggy,pass,Customer
-Joma,techlead,Admin
+wooniety,suspicious,Customer
+techlead,Google,Admin
+henggy,pass,Customer
+joma,techlead,Admin
+hmtg,donut,Customer
+trash raccoon,tabby,Customer
+joker,depression,Customer
+danger_noodle,snek,Admin
+boring_admin,lolol,Admin
+test,tes,Customer

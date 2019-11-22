@@ -9,6 +9,7 @@ class Stock:
     def __init__(self):
         self.name = "View stock"
         self.stock_df = pd.read_csv('data/menu.csv')
+        self.all_items = self.stock_df['Item'].unique()
         self.categories = self.stock_df['Category'].unique()
         self.categories_data = {}
         for category in self.categories:
@@ -21,6 +22,7 @@ class Stock:
 
     # utils to update stock
     def updateStockDF(self): # Temp stock dataframe
+        self.all_items = self.stock_df['Item'].unique()
         self.stock_df = pd.read_csv('data/menu.csv')
         self.categories = self.stock_df['Category'].unique()
         for category in self.categories_data:
@@ -32,7 +34,7 @@ class Stock:
     def updateActualStockCSV(self): 
         # Update actual database stock. Only use when checking out
         # That way if the user quits the program suddenly, stock reverts to normal
-        self.stock_df.to.csv('data/stock.csv', index = False)
+        self.stock_df.to_csv('data/stock.csv', index = False)
 
     # Utils to mess with the stock df
     def removeStock(self, item, num):
@@ -48,13 +50,12 @@ class Stock:
 
     def addStock(self, item): # [[item, category, price, num]]
         self.updateStockDF()
-        self.all_items = self.stock_df['Item'].unique()
-        if item in self.all_items:
+        if item[0][0] in self.all_items:
             self.stock_df.loc[self.stock_df['Item'] == item[0][0], 'Quantity'] += item[0][3]
         else:
             items_to_add = pd.DataFrame(item, columns = self.stock_df.columns)
-            self.cart = self.cart.append(items_to_add, ignore_index = True)
-        self.updateStockDF()
+            self.stock_df = self.stock_df.append(items_to_add, ignore_index = True)
+        self.updateStockCSV()
 
     def getCell(self, value_row, value_column):
         self.updateStockDF()
@@ -83,7 +84,7 @@ class Stock:
                 print("Please don't leave a blank!")
                 enter_to_continue()
             elif category == "0":
-                return 0, 0
+                return 0, 0, 0
             elif category in categories:
                 if return_df:
                     return self.categories_data[categories[category]], self.categories[int(category)-1], category
@@ -96,7 +97,7 @@ class Stock:
     def searchStock(self, search): #Returns array of items that match the description
         results = []
         for item in self.all_items:
-            if search.lower() in item.lower():
+            if search.lower().strip() in item.lower():
                 results.append(item)
         return results
 

@@ -14,10 +14,12 @@ class Stock:
         for category in self.categories:
             self.categories_data[category] = self.stock_df[self.stock_df['Category'] == category] 
 
+    # Create temporary menu to store items
     def readStockFromOG(self):
         self.og_stock = pd.read_csv('data/stock.csv')
         self.og_stock.to_csv('data/menu.csv', index = False)
 
+    # utils to update stock
     def updateStockDF(self): # Temp stock dataframe
         self.stock_df = pd.read_csv('data/menu.csv')
         self.categories = self.stock_df['Category'].unique()
@@ -32,6 +34,7 @@ class Stock:
         # That way if the user quits the program suddenly, stock reverts to normal
         self.stock_df.to.csv('data/stock.csv', index = False)
 
+    # Utils to mess with the stock df
     def removeStock(self, item, num):
         self.updateStockDF()
         if item in self.all_items:
@@ -62,7 +65,8 @@ class Stock:
         self.updateStockDF()
         self.stock_df.loc[self.stock_df['Item'] == value_row, value_column] = new_value
         self.updateStockCSV()
-
+    
+    # Admin functions and utils below
     def showCategory(self, msg1 = "The following categories exist", msg2 = "Which category do you want to check?", return_df = True):
         self.updateStockDF()
         while True:
@@ -82,19 +86,27 @@ class Stock:
                 return 0, 0
             elif category in categories:
                 if return_df:
-                    return self.categories_data[categories[category]], self.categories[int(category)-1]
+                    return self.categories_data[categories[category]], self.categories[int(category)-1], category
                 else:
                     print(self.categories_data[categories[category]])
             else:
                 print("Category does not exist!\n")
                 enter_to_continue()
+    
+    def searchStock(self, search): #Returns array of items that match the description
+        results = []
+        for item in self.all_items:
+            if search.lower() in item.lower():
+                results.append(item)
+        return results
 
     def showAll(self):
         self.updateStockDF()
         print(self.stock_df.to_string(index = False))
         enter_to_continue()
         
-    def action(self):
+    def action(self): # Might not actually need this. Make a super class
         self.updateStockDF()
-        self.functions = MenuFunctions("Show all stocked items", self.showAll, "Show category", self.showCategory)
+        self.functions = MenuFunctions("Show all stocked items", self.showAll, "Show category", self.showCategory, "Add Item", "Reduce Quantity", "Delete item")
         self.functions.show_functions(self.name)
+        return 1

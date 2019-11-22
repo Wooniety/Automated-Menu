@@ -18,12 +18,20 @@ class ExploreAisle:
     def searchForItem(self):
         pass #TODO
 
+    def updateAisleData(self):
+        self.stock.updateStockDF()
+        categories = {}
+        for i, category in enumerate(self.stock.categories):
+            categories[f"{i+1}"] = category
+        self.aisle_data = self.stock.categories_data[categories[self.category_num]]
+        self.aisle_data = self.aisle_data[["Item", "Price", "Stock"]]
+
     def exploreAisle(self):
         clear()
         print(print_banner(self.name))
 
         # Seperate the items into different dataframes for categories
-        self.aisle_data, self.aisle_name = self.stock.showCategory("You see a sign point to different aisles", "Which aisle do you go down?\n")
+        self.aisle_data, self.aisle_name, self.category_num = self.stock.showCategory("You see a sign point to different aisles", "Which aisle do you go down?\n")
         if self.aisle_name == 0:
             self.exit = False
         else:
@@ -35,10 +43,11 @@ class ExploreAisle:
 
         while choice != "0":         
             self.cart.refreshCartDF()
-            # put items in aisle into a dictionary to select. 
+            self.updateAisleData()
             for i, item in enumerate(self.aisle_data.values):
                 category_items[f"{i+1}"] = [item[0], item[1], int(item[2])] #[Item, price, stock]
             clear()
+
             print(print_banner(self.name, self.aisle_name))
             print("The items on the shelves stare back at you...")
             print("0) Don't add item to cart\n")
@@ -94,6 +103,7 @@ class ExploreAisle:
             self.getItemFromAisle()
             self.exploreAisle()
             enter_to_continue()
+        return False
 
 class ShoppingCart:
     def __init__(self):
@@ -135,6 +145,7 @@ class ShoppingCart:
                 else:
                     enter_to_continue()
                     break
+        return False
                 
 
     def refreshCartDF(self):
@@ -188,15 +199,21 @@ class Checkout:
     def __init__(self):
         self.name = "Checkout"
         self.cart = ShoppingCart()
+        self.stock = Stock()
     
-    def getTotalAmt(self):
-        self.total = self.cart.cart[['Price']].copy()
-        self.total = self.total.sum().sum()
-    
+    def getTotalAmt(self): # self.total is the total price of all items
+        total = self.cart.cart[['Price']].copy()
+        total = total.sum().sum()
+        return float(total)
+
     def action(self):
         print_cart, empty = self.cart.viewCart()
         print(print_cart)
-        print(f"Your total amount is: {self.total}")
+        print(f"Your total amount is: ${to_num(self.getTotalAmt(), True, 2)}")
         choice = yes_or_no("Do you want to check out?")
         if choice:
-            pass #TODO Logout
+            clear_cart()
+            clear()
+            print_banner("Checkout")
+            print("Thanks for shopping with the Krusty Krabz!")
+            self.stock.updateActualStockCSV()

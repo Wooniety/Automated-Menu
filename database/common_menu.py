@@ -3,6 +3,9 @@ import getpass
 from database.utils import *
 
 class Menu:
+    """Feed this classes.\n
+    Each class has a self.name which is the name of the option to be displayed,
+    as well as self.action() which will run as a function that leads to other functions."""
     def __init__(self, menu_msg = None, *options):
         self.menu_msg = menu_msg
         self.options = {} # "option number": class
@@ -41,6 +44,7 @@ class Menu:
                 enter_to_continue()
 
 class MenuFunctions:
+    """A menu class for functions instead of classes"""
     def __init__(self, *options): # Menu_Functions(option_name, function) 
         self.options = {"Go back": self.exit} # option_name: function;
         self.option_num = {"0": self.exit} # option_num: function
@@ -85,11 +89,12 @@ class LoginRegister:
         self.user_list = self.users['Username'].unique()
 
     def login(self):
+        """Existing user"""
         while True:
             clear()
             print(print_banner(self.name, "Login"))
             find_user = input("Username: ")
-            password = getpass.getpass("Password: ")
+            password = getpass.getpass("Password: ") # Hides input
             if find_user.lower() in self.lower_user_list:
                 user_password = self.users.loc[self.users['Username'] == find_user.lower(), 'password'].values[0]
                 password = str(hashing(password))
@@ -104,6 +109,7 @@ class LoginRegister:
                 return 1
 
     def register(self, admin = False):
+        """Create new account"""
         clear()
         print(print_banner(self.name, "Register"))
         user_details = [None]*3
@@ -150,7 +156,7 @@ class LoginRegister:
 
         # Update database
         user_details[0] = user_details[0].lower()
-        user_details[1] = hashing(user_details[1])
+        user_details[1] = hashing(user_details[1]) # Hashes the password
         user_details = pd.DataFrame([user_details], columns = self.users.columns)
         self.users = self.users.append(user_details, ignore_index = True)
         self.users.to_csv('data/users.csv', index=False)

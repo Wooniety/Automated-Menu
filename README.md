@@ -1,6 +1,6 @@
 # SPAM Menu
 
-A small application about shopping in a mall.
+You have a cart and you can run free in the confines of the CLI which hosts the Krusty Krabz
 
 ## Prerequisites
 
@@ -28,23 +28,47 @@ python {directory_to_folder}/SPAM-Menu/main.py
 
 ### Login/Register
 
-- Yes you can call yourself Bob and we will rerember that.
-- But you'll also require a password.
-- Admin accounts exists.
+You need to create an account!
+
+Admin accounts exist but since the passwords are hashed you won't be logging in.
+> Or just login as admin using the password 'admin' without quotation marks since this is just a joke program.
 
 ### The User Experience
 
-Your arms can only hold so much.  
-> Hint: Get a basket.  
-If you have a dollar coin you can appreciate modern inventions with an actual cart.
-
 Explore the different isles with their varying items!
+> Ok not that much but sufficient
 
 - Frozen Goods
 - Drinks
+- Bread
+- Sweets
+- Snacks
+
+Or simply just search for it...
+
+#### Discounts
+
+Discount Sunday is thing. Or should it be called Sunday Sales?
+
+### Admin Features
+
+#### User system
+
+- View Users
+- Add more admins
+- Remove users
+
+#### Stock system
+
+- Restock items
+- Add more items
+- Remove items
 
 ## Misc
 
 ### Why Pandas?
 
-I wanted a nice way to display the menu without going into GUI so I figured the dataframe from Pandas would be a good idea. Also conveniently has some nice features like sum or merge.
+- I wanted to learn it
+- Already puts the data into a nice table
+- Useful functions like `sum`
+- Reading from CSV and manipulating the data is really useful

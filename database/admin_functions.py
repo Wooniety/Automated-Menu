@@ -10,6 +10,7 @@ class ChangeStock:
         self.stock = Stock()
     
     def viewStock(self):
+        """Shows all the stocks"""
         self.stock.updateStockDF()
         clear()
         print(print_banner(self.name, "View Stock"))
@@ -24,6 +25,7 @@ class ChangeStock:
             print(print_banner(self.name, "Add Stock"))
             stock_list = self.stock.stock_df.values # [[Item, Category, Price, Quantity]]
             item_dict = {}
+            # Add items to a dictionary for easy reference
             for i, item in enumerate(stock_list):
                 item_dict[f"{i+1}"] = [item[0], item[1], item[2], item[3]]
             display_stock = self.stock.stock_df
@@ -145,8 +147,10 @@ class CheckUsers:
     def addAdmin(self):
         self.updateDF()
         self.login_stuff.register(True)
+        self.updateDF()
     
     def removeUser(self):
+        self.updateDF()
         while True:
             clear()
             print(print_banner(self.name, "Remove User"))

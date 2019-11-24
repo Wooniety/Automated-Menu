@@ -37,17 +37,8 @@ class Menu:
             elif user_choice in self.options: #If user types in option number
                 return user_choice
             else:
-                options_exists = False
-                for option in sorted(self.options): # Check if user typed in option instead of number
-                    if user_choice.lower() in self.options[option].name.lower():
-                        if yes_or_no(f"{self.options[option].name}?"):
-                            return option
-                        else:
-                            options_exists = True
-                            continue
-                if options_exists == False: # Can't do else because 'continue' would still trigger else
-                    print(f"Sorry. I'm not sure what you mean by '{user_choice}'") 
-                    enter_to_continue()
+                print(f"Sorry. I'm not sure what you mean by '{user_choice}'") 
+                enter_to_continue()
 
 class MenuFunctions:
     def __init__(self, *options): # Menu_Functions(option_name, function) 

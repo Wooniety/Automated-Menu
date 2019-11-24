@@ -13,22 +13,36 @@ class ChangeStock:
         self.stock.updateStockDF()
         clear()
         print(print_banner(self.name, "View Stock"))
+        print("All the items in the store:")
         self.stock.showAll()
 
-    def addStock(self):
+    def restock(self):
+        """Add quantity to items"""
         self.stock.updateStockDF()
         clear()
         print(print_banner(self.name, "Add Stock"))
-        stock_list = self.stock.stock_df.values
+        stock_list = self.stock.stock_df.values # [[Item, Category, Price, Quantity]]
         item_dict = {}
         for i, item in enumerate(stock_list):
             item_dict[f"{i+1}"] = [item[0], item[1], item[2], item[3]]
         display_stock = self.stock.stock_df
         display_stock.index += 1
         print(display_stock)
-        choice = input("\nPick an item to add: ").strip()
-        self.stock.addStock([item_dict[choice]])
-        print(f"{item_dict[choice][0].capitalize()} added")
+        while True:
+            print(print_banner(self.name, "Add Stock"))
+            print(display_stock)
+            print(item_dict)
+            choice = input("\nPick an item to add: ").strip()
+            if valid_option(choice, len(item_dict)) == False:
+                print("Invalid option!")
+                continue
+            item_name = item_dict[choice][0].capitalize()
+            amt = input(f"How many {item_name}")
+            if valid_option(amt, self.stock.getCell(item_name, 'Stock'), True) == False:
+                continue
+            item_dict[choice][2] = int(amt)
+            self.stock.addStock([item_dict[choice]])
+        print(f"{amt} {item_name} added")
         enter_to_continue()
     
     def addItem(self):
@@ -42,6 +56,8 @@ class ChangeStock:
             item_to_add[i] = input(prompt).strip()
             if i < 2:
                 item_to_add[i] = item_to_add[i].lower().capitalize()
+            else:
+                item_to_add[i] = float(item_to_add[i])
         item_to_add = pd.DataFrame([item_to_add], columns = self.stock.stock_df.columns)
         self.stock.stock_df = self.stock.stock_df.append(item_to_add, ignore_index = True)
         self.stock.updateStockCSV()
@@ -66,9 +82,10 @@ class ChangeStock:
 
     def action(self):
         self.stock.updateStockDF()
-        menu = MenuFunctions("View Stock", self.viewStock, "Add Stock",  self.addStock, "Add Item", self.addItem, "Remove Stock", self.removeStock)
+        menu = MenuFunctions("View Stock", self.viewStock, "Restock",  self.restock, "Add Item", self.addItem, "Remove Stock", self.removeStock)
         menu.show_functions(self.name)
         self.stock.updateActualStockCSV()
+        return False
 
 class CheckUsers:
     def __init__(self, current_user):
@@ -118,3 +135,4 @@ class CheckUsers:
         self.updateDF()
         menu.show_functions(self.name)
         self.updateDF()
+        return False

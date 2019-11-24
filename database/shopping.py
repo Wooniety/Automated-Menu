@@ -4,11 +4,8 @@ from database.utils import *
 from database.common_menu import *
 from database.stock import *
 
-"""
-Explore the aisle and search for items by category.
-Can add to cart from here
-"""
 class ExploreAisle:
+    """Get item by category"""
     def __init__(self):
         self.name = "Explore the shopping aisle"
         self.stock = Stock()
@@ -16,6 +13,7 @@ class ExploreAisle:
 
     # Update the aisle dataframe whenever stuff like stock changes.
     def updateAisleData(self):
+        """Refresh Items"""
         self.stock.updateStockDF()
         categories = {}
         for i, category in enumerate(self.stock.categories):
@@ -23,8 +21,8 @@ class ExploreAisle:
         self.aisle_data = self.stock.categories_data[categories[self.category_num]]
         self.aisle_data = self.aisle_data[["Item", "Price", "Stock"]]
 
-    # Display different categories
     def exploreAisle(self):
+        """Display different categories and get category data"""
         clear()
         print(print_banner(self.name))
 
@@ -35,8 +33,8 @@ class ExploreAisle:
         else:
             self.aisle_data = self.aisle_data[["Item", "Price", "Stock"]]
 
-    # Add item to cart from particular category
     def getItemFromAisle(self):
+        """Add item from category to cart"""
         category_items = {"0": None}
         choice = None
 
@@ -184,7 +182,8 @@ class ShoppingCart:
                     elif choice in items_to_remove:
                         while True:
                             amt = input(f"How many {items_to_remove[choice]}?\n").strip()
-                            if valid_option(amt, len(self.items_in_cart), True):
+                            print(self.cart)
+                            if valid_option(amt, len(str(self.cart.loc[1, 'Quantity'])), True):
                                 amt = int(amt)
                                 break
                             else:
@@ -254,7 +253,8 @@ class ShoppingCart:
     
     def getCell(self, value_row, value_column):
         self.refreshCartDF()
-        return self.cart.loc[self.cart['Item'] == value_row, value_column].values[0]
+        cell = self.cart.loc[self.cart['Items'] == value_row, value_column].values[0]
+        return cell
 
 class Checkout:
     def __init__(self):
@@ -266,11 +266,18 @@ class Checkout:
         total = self.cart.cart[['Price']].copy()
         total = total.sum().sum()
         return float(total)
-
+    
     def action(self):
         print_cart, empty = self.cart.viewCart()
         print(print_cart)
-        print(f"Your total amount is: ${to_num(self.getTotalAmt(), True, 2)}")
+        total_amt = to_num(self.getTotalAmt(), True, 2)
+
+        # Apply discount on discount day
+        discount_day = "Sunday"
+        if get_day() == discount_day:
+            total_amt = to_num(total_amt*0.5, True, 2)
+            print(f"Since today is {discount_day}, 5% off all items!")
+        print(f"Your total amount is: ${total_amt}")
         choice = yes_or_no("Do you want to check out?")
         if choice:
             clear_cart()

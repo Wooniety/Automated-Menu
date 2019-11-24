@@ -6,6 +6,7 @@ from os import system, name
 from time import sleep
 
 def if_num(num_to_check, if_float = False):
+    """True or false if string is num"""
     is_num = True
     try:
         if if_float:
@@ -17,7 +18,8 @@ def if_num(num_to_check, if_float = False):
     finally:
         return is_num
 
-def to_num(int_to_check, error_msg = "Invalid number! Please enter something valid.\n", if_float = False, round_decimal = None): #string to num. Leave if_float empty if you want an int returned. Error msg also customizable 
+def to_num(int_to_check, error_msg = "Invalid number! Please enter something valid.\n", if_float = False, round_decimal = None):
+    """String to num. Leave if_float empty if you want an int returned. Error msg also customizable """
     not_num = True
     while not_num:
         try:
@@ -35,9 +37,9 @@ def to_num(int_to_check, error_msg = "Invalid number! Please enter something val
                     returned_num = round(returned_num*(10**round_decimal))/(10**round_decimal)
                 return returned_num
 
-def yes_or_no(prompt, error_msg = None): # Prompt yes or no
+def yes_or_no(prompt, error_msg = None):
     """
-    Prompts for Yes or No Question.
+    Prompts for Yes or No Question.\n
     print(f'{prompt} (Y/N): ')
     """
     while True:
@@ -58,10 +60,12 @@ def clear():
     else: 
         _ = system('clear') 
 
-def get_day(): # Return the day as a string
+def get_day():
+    """Return the day"""
     return datetime.today().strftime('%A')
 
-def calc_spaces(num_spaces):
+def get_spaces(num_spaces):
+    """Print spaces"""
     spaces = " " * num_spaces
     return spaces
 
@@ -78,9 +82,9 @@ def print_banner(section = "", msg = ""):
 
     if section != "":
         mall_name = f"{mall_name} - {section}"
-        header_spaces = calc_spaces(int(columns/2-len(mall_name)/2))
+        header_spaces = get_spaces(int(columns/2-len(mall_name)/2))
     if msg != "":
-        msg_spaces = calc_spaces(int(columns/2 - len(msg)/2))
+        msg_spaces = get_spaces(int(columns/2 - len(msg)/2))
         mall_name = f"{mall_name}\n\n{msg_spaces}{msg}"
 
     banner = f"\033[1;36;40m{header}\n\n{header_spaces}{mall_name}\n\n{header}\033[0;37;40m"
@@ -95,10 +99,6 @@ def clear_cart():
     cart_file = open("data/cart.csv", "w")
     cart_file.write('"Items","Quantity","Price"')
     cart_file.close()
-
-def get_spaces(length):
-    spaces = " "*length
-    return spaces
 
 def valid_option(choice, num_of_options, option_zero = False):
     """Check if given option is correct. Choice is a string, num_of_options is an int. option_zero is True if there is an option zero."""

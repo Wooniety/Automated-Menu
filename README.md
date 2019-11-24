@@ -5,7 +5,7 @@ A small application about shopping in a mall.
 ## Prerequisites
 
 - Python 3.7 or below
-- Pandas Dataframe (If you're using Anaconda, this should already be installed.)
+- Pandas
   - https://pandas.pydata.org/pandas-docs/stable/install.html
 
 ## How to run

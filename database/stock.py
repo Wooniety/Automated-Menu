@@ -51,7 +51,7 @@ class Stock:
     def addStock(self, item): # [[item, category, price, num]]
         self.updateStockDF()
         if item[0][0] in self.all_items:
-            self.stock_df.loc[self.stock_df['Item'] == item[0][0], 'Quantity'] += item[0][3]
+            self.stock_df.loc[self.stock_df['Item'] == item[0][0], 'Stock'] += item[0][3]
         else:
             items_to_add = pd.DataFrame(item, columns = self.stock_df.columns)
             self.stock_df = self.stock_df.append(items_to_add, ignore_index = True)

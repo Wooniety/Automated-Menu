@@ -17,6 +17,7 @@ class Stock:
 
     # Create temporary menu to store items
     def readStockFromOG(self):
+        # TODO If not in stock, do not display item
         self.og_stock = pd.read_csv('data/stock.csv')
         self.og_stock.to_csv('data/menu.csv', index = False)
 
@@ -44,6 +45,8 @@ class Stock:
                 self.stock_df.loc[self.stock_df['Item'] == item, 'Stock'] -= num
             else:
                 print("Too many!")
+            if self.getCell(item, 'Stock') == 0:
+                self.stock_df = self.stock_df.drop(self.stock_df.index[self.stock_df['Item'] == item], axis=0)
         else:
             print("Invalid input!")
         self.updateStockCSV()

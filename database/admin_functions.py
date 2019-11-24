@@ -33,8 +33,8 @@ class ChangeStock:
                 print(print_banner(self.name, "Add Stock"))
                 print(display_stock)
                 choice = input("\nPick an item to add (0 to quit): ").strip()
-                if choice == "0":
-                    return
+                if choice == "0": # Stop restocking
+                    return 
                 if valid_option(choice, len(item_dict)) == False:
                     print("Invalid option!")
                     enter_to_continue()
@@ -45,47 +45,77 @@ class ChangeStock:
                     print("Invalid option!")
                     enter_to_continue()
                     continue
-                item_dict[choice][2] = int(amt)
-                print(item_dict[choice])
+                item_dict[choice][3] = int(amt)
                 self.stock.addStock([item_dict[choice]])
                 break
             print(f"{amt} {item_name} added")
             enter_to_continue()
     
     def addItem(self):
-        self.stock.updateStockDF()
-        clear()
-        print(print_banner(self.name, "Add Item to Stock"))
-        item_to_add = [None]*4
-        prompts = ["Item: ", "Category: ", "Price: ", "Stock: "]
-        print(self.stock.stock_df.to_string(index = False))
-        for i, prompt in enumerate(prompts):
-            item_to_add[i] = input(prompt).strip()
-            if i < 2:
-                item_to_add[i] = item_to_add[i].lower().capitalize()
+        """Add new item to stock"""
+        while True:
+            self.stock.updateStockDF()
+            clear()
+            print(print_banner(self.name, "Add Item to Stock"))
+            item_to_add = [None]*4
+            prompts = ["Item name: ", "Category: ", "Price: ", "Stock: "]
+            print(self.stock.stock_df.to_string(index = False))
+            print("\nJust need you to fill in some details to add a new item... (0 to quit)")
+            for i, prompt in enumerate(prompts):
+                item_to_add[i] = input(prompt).strip()
+                if i < 2:
+                    if item_to_add[i] == "0":
+                        return
+                    while True:
+                        if item_to_add[i] == "":
+                            item_to_add[i] = input(prompt).strip()
+                        else:
+                            break
+                    item_to_add[i] = item_to_add[i].lower().capitalize()
+                else:
+                    while True:
+                        if if_num(item_to_add[i]) == False:
+                            item_to_add[i] = input(prompt).strip()
+                        else:
+                            break
+                    item_to_add[i] = float(item_to_add[i])
+
+            # Add {num} {item name} in the {category} for {price} each? 
+            choice = yes_or_no(f"Add {item_to_add[3]} {item_to_add[0]} in the {item_to_add[1]} for ${to_num(item_to_add[2], '', True, 2)} each?")
+
+            if choice:
+                print(f"Added {item_to_add[0]}")
+                item_to_add = pd.DataFrame([item_to_add], columns = self.stock.stock_df.columns)
+                self.stock.stock_df = self.stock.stock_df.append(item_to_add, ignore_index = True)
+                self.stock.updateStockCSV()
+                self.stock.updateActualStockCSV()
             else:
-                item_to_add[i] = float(item_to_add[i])
-        item_to_add = pd.DataFrame([item_to_add], columns = self.stock.stock_df.columns)
-        self.stock.stock_df = self.stock.stock_df.append(item_to_add, ignore_index = True)
-        self.stock.updateStockCSV()
-        self.stock.updateActualStockCSV()
+                print("Cancelled")
+            enter_to_continue()
 
     def removeStock(self):
-        self.stock.updateStockDF()
-        clear()
-        self.stock.showAll()
-        print(print_banner(self.name, "Remove Stock"))
-        stock_list = self.stock.stock_df.values
-        item_dict = {}
-        for i, item in enumerate(stock_list):
-            item_dict[f"{i+1}"] = [item]
-        display_stock = self.stock.stock_df
-        display_stock.index += 1
-        print(display_stock)
-        choice = input("Pick an item to add: ")
-        print(item_dict[choice])
-        enter_to_continue()
-        self.stock.addStock(item_dict[choice])
+        while True:
+            self.stock.updateStockDF()
+            all_items = self.stock.all_items
+            clear()
+            print(print_banner(self.name, "Remove Item"))
+            print(self.stock.stock_df.to_string(index = False))
+            item_to_remove = input("Enter the name of the item to be removed (0 to exit): ").strip().lower()
+            if item_to_remove == "0":
+                break
+            for item in all_items:
+                if item_to_remove == item.lower():
+                    choice = yes_or_no(f"Remove {item}?")
+                    if choice:
+                        print(f"Removed {item}")
+                        self.stock.removeStock(item, self.stock.getCell(item, "Stock"))
+                        self.stock.updateStockCSV()
+                        self.stock.updateActualStockCSV()
+                        enter_to_continue()
+                    else:
+                        break
+            else:
+                print("Item does not exist!")
 
     def action(self):
         self.stock.updateStockDF()

@@ -5,14 +5,14 @@ from datetime import datetime
 from os import system, name
 from time import sleep
 
-def if_num(num_to_check, if_float = False):
-    """True or false if string is num"""
+def if_num(num_to_check):
+    """True or false if string is num(can be num or float)"""
     is_num = True
     try:
-        if if_float:
+        if num_to_check.isnumeric():
             float(num_to_check)
         else:
-            int(num_to_check)
+            is_num = False
     except ValueError:
         is_num = False
     finally:

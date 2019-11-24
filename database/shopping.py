@@ -80,7 +80,7 @@ class ExploreAisle:
                         print("Please enter an amount!")
                         enter_to_continue()
                         continue
-                    elif if_num(amt):
+                    elif amt.isnumeric():
                         amt = int(amt)
                     else:
                         amt = -1
@@ -156,7 +156,7 @@ class SearchItem:
 
 class ShoppingCart:
     def __init__(self):
-        self.name = "View items" # TODO: items/basket/cart
+        self.name = "View items"
         self.cart = pd.read_csv("data/cart.csv")
         self.stock = Stock()
 

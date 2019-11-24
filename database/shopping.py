@@ -1,20 +1,20 @@
+# Import stuff
 import pandas as pd
 from database.utils import *
 from database.common_menu import *
 from database.stock import *
 
-class GetCarrier:
-    def __init__(self):
-        self.name = "Get shopping cart/basket"
-    def action(self):
-        pass
-
+"""
+Explore the aisle and search for items by category.
+Can add to cart from here
+"""
 class ExploreAisle:
     def __init__(self):
         self.name = "Explore the shopping aisle"
         self.stock = Stock()
         self.cart = ShoppingCart()
 
+    # Update the aisle dataframe whenever stuff like stock changes.
     def updateAisleData(self):
         self.stock.updateStockDF()
         categories = {}
@@ -23,6 +23,7 @@ class ExploreAisle:
         self.aisle_data = self.stock.categories_data[categories[self.category_num]]
         self.aisle_data = self.aisle_data[["Item", "Price", "Stock"]]
 
+    # Display different categories
     def exploreAisle(self):
         clear()
         print(print_banner(self.name))
@@ -34,23 +35,35 @@ class ExploreAisle:
         else:
             self.aisle_data = self.aisle_data[["Item", "Price", "Stock"]]
 
+    # Add item to cart from particular category
     def getItemFromAisle(self):
         category_items = {"0": None}
         choice = None
 
+        # While not exit
         while choice != "0":         
             self.cart.refreshCartDF()
             self.updateAisleData()
+            
+            # Add items from a cateogory into a dictionary to refer to.
             for i, item in enumerate(self.aisle_data.values):
                 category_items[f"{i+1}"] = [item[0], item[1], int(item[2])] #[Item, price, stock]
             clear()
 
+            """
+            0) Don't add item to cart
+
+               Items    Price   In stock
+            1) Chicken  $5.20   14
+            """
             print(print_banner(self.name, self.aisle_name))
             print("The items on the shelves stare back at you...")
             print("0) Don't add item to cart\n")
-            print("   Items      Price   In stock")
+            print("   Items        Price   In stock")
             for i, item in enumerate(self.aisle_data.values):
-                print(f"{i+1}) {item[0]}{get_spaces(10-len(item[0]))} {item[1]}{get_spaces(7-len(str(item[1])))} {int(item[2])}")# While not exit
+                # option_num) Item, price, stock
+                print(f"{i+1}) {item[0]}{get_spaces(12-len(item[0]))} ${item[1]}{get_spaces(7-len(str(item[1])))} {int(item[2])}") 
+
             choice = input("\nAdd an item to cart?\n")
             clear()
             print(print_banner(self.name, self.aisle_name))
@@ -84,7 +97,7 @@ class ExploreAisle:
                 if amt == 0: # Don't add anything
                     pass
                 else:
-                    to_cart = [[category_items[choice][0], amt, category_items[choice][1]]]
+                    to_cart = [[category_items[choice][0], amt, category_items[choice][1]*amt]]
                     category_items[choice][2] -= amt
                     self.cart.addItemToCart(to_cart)
                     print(f"Added {amt} {category_items[choice][0]} to cart")
@@ -116,16 +129,28 @@ class SearchItem:
         if len(found_items) > 0:
             print("You found the following things that match your search: ")
             all_items = {}
+            print(f"   Item:        Price:  In stock:")
             for i, item in enumerate(found_items):
-                all_items[f"{i}"] = item
-                print(f"{i}) {item}")
+                all_items[f"{i+1}"] = item
+                print(f"{i+1}) {item}{get_spaces(12-len(item))} {self.stock.getCell(item, 'Price')}{get_spaces(7-len(str(self.stock.getCell(item, 'Price'))))} {self.stock.getCell(item, 'Stock')}") # Option num) item (stock)
             choice = yes_or_no("Do you want to add it to your cart?")
             if choice:
                 cart = ShoppingCart()
-                choose_item = input("Item number: ").strip()
-                amt = int(input("Amount: "))
-                choose_item = all_items[choose_item]
-                cart.addItemToCart([[choose_item, self.stock.getCell(choose_item, "Category"), self.stock.getCell(choose_item, "Price"), amt]])
+                while True:
+                    choose_item = input("Item number: ").strip()
+                    if valid_option(choose_item, len(found_items)):
+                        choose_item = all_items[choose_item]
+                        break
+                    else:
+                        print("Invalid option!")
+                while True:
+                    amt = input(f"Number of {choose_item}: ").strip()
+                    if valid_option(amt, self.stock.getCell(choose_item, 'Stock'), True):
+                        amt = int(amt)
+                        break
+                print(f"Added {amt} {choose_item} to cart")
+                item_to_add = [choose_item, amt, self.stock.getCell(choose_item, 'Price')*amt]
+                self.cart.addItemToCart([item_to_add])
         else:
             print("You couldn't find anything...")
         enter_to_continue()
@@ -158,15 +183,13 @@ class ShoppingCart:
                         pass
                     elif choice in items_to_remove:
                         while True:
-                            amt = input("How many?\n").strip()
-                            if if_num(amt):
+                            amt = input(f"How many {items_to_remove[choice]}?\n").strip()
+                            if valid_option(amt, len(self.items_in_cart), True):
                                 amt = int(amt)
-                                if amt > len(self.items_in_cart) or amt < 0:
-                                    print("Invalid number!")
-                                else:
-                                    break
+                                break
                             else:
                                 print("Invalid input!")
+                                enter_to_continue()
                         self.removeFromCart(items_to_remove[choice], amt)
                 else:
                     enter_to_continue()
@@ -183,13 +206,17 @@ class ShoppingCart:
 
     def addItemToCart(self, items):
         '''
-        items is a list [[item, quantity, price]]
-        For the dataframe it needs the array to be like this [[]]
+        items is a list [[item, quantity, total price]]
         '''
         self.refreshCartDF()
-        if items[0][0] in self.items_in_cart:
+        if items[0][1] == 0:
+            # Don't add anything
+            pass
+        elif items[0][0] in self.items_in_cart:
+            # No. item in cart += amt to add
             self.cart.loc[self.cart['Items'] == items[0][0], 'Quantity'] += items[0][1]
-            self.cart.loc[self.cart['Items'] == items[0][0], 'Price'] += items[0][2]*items[0][1]
+            # Price of item in cart += price of 1 x quantity
+            self.cart.loc[self.cart['Items'] == items[0][0], 'Price'] += items[0][2] 
         else:
             items_to_add = pd.DataFrame(items, columns = self.cart.columns)
             self.cart = self.cart.append(items_to_add, ignore_index = True)
@@ -198,18 +225,22 @@ class ShoppingCart:
         #     self.stock
         self.updateToCart()
     
-    def removeFromCart(self, item, num_of_items): # removeFromCart("Milk", 1, 3)
+    def removeFromCart(self, item, num_of_items):
         self.refreshCartDF()
-        item = item.lower().capitalize()
+        self.stock.updateStockDF()
         if item in self.items_in_cart:
+            # Add back to stock
+            self.stock.changeValue(item, 'Stock', self.stock.getCell(item, 'Stock')+num_of_items)
+            # Remove from cart
             self.cart.loc[self.cart['Items'] == item, 'Quantity'] -= num_of_items
-            self.cart.loc[self.cart['Items'] == item, 'Price'] -= num_of_items*self.stock.getCell(item, "Price")
+            self.cart.loc[self.cart['Items'] == item, 'Price'] -= num_of_items*(self.stock.getCell(item, 'Price'))
+            # Remove item completely from cart if 0 or less
             if self.cart.loc[self.cart['Items'] == item, 'Quantity'].values[0] <= 0:
                 self.cart = self.cart.drop(self.cart.index[self.cart['Items'] == item], axis=0)
-                
             self.updateToCart()
         else:
             print("Item does not exist in cart!")
+            enter_to_continue()
     
     def viewCart(self, show_index = False):
         self.cart = pd.read_csv("data/cart.csv")
@@ -220,6 +251,10 @@ class ShoppingCart:
         else:
             self.cart_empty = False
             return self.cart.to_string(index=show_index), False
+    
+    def getCell(self, value_row, value_column):
+        self.refreshCartDF()
+        return self.cart.loc[self.cart['Item'] == value_row, value_column].values[0]
 
 class Checkout:
     def __init__(self):
@@ -243,3 +278,5 @@ class Checkout:
             print_banner("Checkout")
             print("Thanks for shopping with the Krusty Krabz!")
             self.stock.updateActualStockCSV()
+        else:
+            return False

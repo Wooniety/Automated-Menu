@@ -101,6 +101,7 @@ class LoginRegister:
             password = getpass.getpass("Password: ")
             if find_user.lower() in self.lower_user_list:
                 user_password = self.users.loc[self.users['username'] == find_user.lower(), 'password'].values[0]
+                password = hash(password)
                 if password == user_password:
                     self.username = find_user
                     self.user_type = self.users.loc[self.users['username'] == self.username.lower(), 'account_type'].values[0]
@@ -128,7 +129,10 @@ class LoginRegister:
             print(print_banner(header, "Register"))
             print(msg)
             user_details[0] = input("Username: ").strip()
-            if user_details[0].lower() in self.lower_user_list:
+            if user_details[0] == "":
+                print("Enter a username!")
+                continue
+            elif user_details[0].lower() in self.lower_user_list:
                 choice = yes_or_no("Username taken. Cancel?")
                 if choice:
                     return 1
@@ -139,6 +143,8 @@ class LoginRegister:
             if user_details[1] != user_details[2]:
                 print("Passwords do not match!")
                 enter_to_continue()
+            elif user_details[1].strip() == "":
+                print("Enter a password!")
             else:
                 break
         user_details[2] = acc_type
@@ -153,6 +159,7 @@ class LoginRegister:
 
         # Update database
         user_details[0] = user_details[0].lower()
+        user_details[1] = hash(user_details[1])
         user_details = pd.DataFrame([user_details], columns = self.users.columns)
         self.users = self.users.append(user_details, ignore_index = True)
         self.users.to_csv('data/users.csv', index=False)

@@ -1,9 +1,12 @@
 Item,Category,Price,Stock
-Tea,Drinks,2.0,0.0
-Chicken,Frozen Goods,2.5,10.0
-Milk,Drinks,2.5,9.0
-Wheels,Sweets,3.5,19.0
-Milo,Drinks,1.2,15.0
-Sprite,Drinks,10.0,10.0
+Tea,Drinks,2.0,22.0
+Chicken,Frozen Goods,2.5,20.0
+Milk,Drinks,2.5,34.0
+Wheels,Sweets,3.5,20.0
+Milo,Drinks,1.2,30.0
+Sprite,Drinks,10.0,50.0
 Potato chips,Snacks,4.0,22.0
-Gyuio,Drinks,2.0,55.0
+Gummy Bears,Sweets,2.50,30.0
+Gummy Worms,Sweets,2.50,27.0
+Cookies,Snacks,5.0,25.0
+Beef,Frozen Goods,7.0,17.0

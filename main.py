@@ -13,7 +13,7 @@ from database.stock import *
 from database.shopping import *
 from database.admin_functions import *
 
-# Default Menu options
+# Leave Mall
 class LeaveMall:
     def __init__(self):
         self.name = "Logout"
@@ -28,6 +28,7 @@ stock.readStockFromOG()
 login = LoginRegister()
 
 def main():
+    clear_cart()
     clear()
     print_banner("Krusty Krabz")
     login.action()
@@ -56,10 +57,9 @@ def main():
     print(print_banner("Exit"))
     choice = yes_or_no("Exit completely?")
     if choice:
-        clear_cart()
         exit(0)
+    clear_cart()
 
-clear_cart()
 # Main loop
 while True:
     main()

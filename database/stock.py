@@ -20,8 +20,8 @@ class Stock:
         self.og_stock = pd.read_csv('data/stock.csv')
         self.og_stock.to_csv('data/menu.csv', index = False)
 
-    # utils to update stock
     def updateStockDF(self): # Temp stock dataframe
+        """Update menu dataframe from menu.csv"""
         self.all_items = self.stock_df['Item'].unique()
         self.stock_df = pd.read_csv('data/menu.csv')
         self.categories = self.stock_df['Category'].unique()

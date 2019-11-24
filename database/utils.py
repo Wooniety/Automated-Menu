@@ -35,6 +35,10 @@ def to_num(int_to_check, error_msg = "Invalid number! Please enter something val
                 return returned_num
 
 def yes_or_no(prompt, error_msg = None): # Prompt yes or no
+    """
+    Prompts for Yes or No Question.
+    print(f'{prompt} (Y/N): ')
+    """
     while True:
         check = input(f"{prompt} (Y/N): ").strip()
         if check.lower() == "n" or check.lower() == "no":
@@ -45,10 +49,11 @@ def yes_or_no(prompt, error_msg = None): # Prompt yes or no
             print(error_msg)
 
 def clear(): 
-    # for windows 
+    """Clear Screen. Works for both Windows and Bash"""
+    # Windows 
     if name == 'nt': 
         _ = system('cls') 
-    # for mac and linux
+    # Bash
     else: 
         _ = system('clear') 
 
@@ -59,7 +64,13 @@ def calc_spaces(num_spaces):
     spaces = " " * num_spaces
     return spaces
 
-def print_banner(section = "", msg = ""): # Header banner
+def print_banner(section = "", msg = ""):
+    """
+    ***********************\n
+    {Mall Name} - {section}\n
+              {msg}\n
+    ***********************
+    """
     mall_name = "Krusty Krabz"
     columns, rows = shutil.get_terminal_size(fallback=(80, 24))
     header = "*"*columns
@@ -75,10 +86,11 @@ def print_banner(section = "", msg = ""): # Header banner
     return banner
 
 def enter_to_continue():
+    """Usually to stop the screen from clearing"""
     input("\nPress Enter to continue... ")
 
-# Clear cart
 def clear_cart():
+    """Empty cart"""
     cart_file = open("data/cart.csv", "w")
     cart_file.write('"Items","Quantity","Price"')
     cart_file.close()
@@ -86,3 +98,18 @@ def clear_cart():
 def get_spaces(length):
     spaces = " "*length
     return spaces
+
+def valid_option(choice, num_of_options, option_zero = False):
+    """Check if given option is correct. Choice is a string, num_of_options is an int. option_zero is True if there is an option zero."""
+    if choice.isnumeric():
+        choice = int(choice)
+        if choice > num_of_options:
+            return False
+        elif option_zero and choice >= 0:
+            return True
+        elif choice >= 1:
+            return True
+        else:
+            return False
+    else:
+        return False

@@ -36,7 +36,7 @@ def main():
 
     # Different menu depending on the account type
     if login.user_type == "Customer":
-        msg = f"Welcome {login.username} this is the Krusty Krab Shopping Mart. Mr Krabs lost Spongebob and couldn't continue running the other one so he started a shopping mall to overcome his depression."
+        msg = f"Welcome {login.username} this is the Krusty Krab Shopping Mart. Mr Krabs lost Spongebob and couldn't continue running the other one so he started a shopping mall to overcome his sadness."
         main_menu = Menu(msg, "0", LeaveMall())
         main_menu.add_menu("1", ExploreAisle())
         main_menu.add_menu("2", SearchItem())

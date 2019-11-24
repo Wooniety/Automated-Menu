@@ -18,32 +18,39 @@ class ChangeStock:
 
     def restock(self):
         """Add quantity to items"""
-        self.stock.updateStockDF()
-        clear()
-        print(print_banner(self.name, "Add Stock"))
-        stock_list = self.stock.stock_df.values # [[Item, Category, Price, Quantity]]
-        item_dict = {}
-        for i, item in enumerate(stock_list):
-            item_dict[f"{i+1}"] = [item[0], item[1], item[2], item[3]]
-        display_stock = self.stock.stock_df
-        display_stock.index += 1
-        print(display_stock)
         while True:
+            self.stock.updateStockDF()
+            clear()
             print(print_banner(self.name, "Add Stock"))
+            stock_list = self.stock.stock_df.values # [[Item, Category, Price, Quantity]]
+            item_dict = {}
+            for i, item in enumerate(stock_list):
+                item_dict[f"{i+1}"] = [item[0], item[1], item[2], item[3]]
+            display_stock = self.stock.stock_df
+            display_stock.index += 1
             print(display_stock)
-            print(item_dict)
-            choice = input("\nPick an item to add: ").strip()
-            if valid_option(choice, len(item_dict)) == False:
-                print("Invalid option!")
-                continue
-            item_name = item_dict[choice][0].capitalize()
-            amt = input(f"How many {item_name}")
-            if valid_option(amt, self.stock.getCell(item_name, 'Stock'), True) == False:
-                continue
-            item_dict[choice][2] = int(amt)
-            self.stock.addStock([item_dict[choice]])
-        print(f"{amt} {item_name} added")
-        enter_to_continue()
+            while True:
+                print(print_banner(self.name, "Add Stock"))
+                print(display_stock)
+                choice = input("\nPick an item to add (0 to quit): ").strip()
+                if choice == "0":
+                    return
+                if valid_option(choice, len(item_dict)) == False:
+                    print("Invalid option!")
+                    enter_to_continue()
+                    continue
+                item_name = item_dict[choice][0].capitalize()
+                amt = input(f"How many {item_name}: ")
+                if valid_option(amt, self.stock.getCell(item_name, 'Stock'), True) == False:
+                    print("Invalid option!")
+                    enter_to_continue()
+                    continue
+                item_dict[choice][2] = int(amt)
+                print(item_dict[choice])
+                self.stock.addStock([item_dict[choice]])
+                break
+            print(f"{amt} {item_name} added")
+            enter_to_continue()
     
     def addItem(self):
         self.stock.updateStockDF()
@@ -100,9 +107,9 @@ class CheckUsers:
         self.login_stuff.update_users()
         self.users = self.login_stuff.users
 
-    def viewAllUsers(self):
+    def viewAllUsers(self, show_index = True):
         self.updateDF()
-        print(self.users[['Username','account_type']])
+        print((self.users[['Username','account_type']]).to_string(index = show_index))
         enter_to_continue()
     
     def addAdmin(self):
@@ -114,7 +121,8 @@ class CheckUsers:
             clear()
             print(print_banner(self.name, "Remove User"))
             self.updateDF()
-            user_remove = input("User to remove (0 to cancel): ").strip().lower()
+            self.viewAllUsers(False)
+            user_remove = input("Enter name of user ot remove (0 to cancel): ").strip().lower()
             if self.current_user.lower() == user_remove:
                 print("You can't remove yourself!")
                 enter_to_continue()

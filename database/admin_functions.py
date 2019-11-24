@@ -82,6 +82,9 @@ class ChangeStock:
                             break
                     item_to_add[i] = float(item_to_add[i])
 
+            if item_to_add[0] in self.stock.all_items:
+                print("Item already exists!")
+                continue
             # Add {num} {item name} in the {category} for {price} each? 
             choice = yes_or_no(f"Add {item_to_add[3]} {item_to_add[0]} in the {item_to_add[1]} for ${to_num(item_to_add[2], '', True, 2)} each?")
 

@@ -76,6 +76,7 @@ class CheckUsers:
         self.name = "Check Users"
         self.login_stuff = LoginRegister()
         self.users = self.login_stuff.users
+        self.users.index += 1
         self.stock = Stock()
     
     def updateDF(self):
@@ -84,7 +85,7 @@ class CheckUsers:
 
     def viewAllUsers(self):
         self.updateDF()
-        print(self.users)
+        print(self.users[['Username','account_type']])
         enter_to_continue()
     
     def addAdmin(self):
@@ -103,7 +104,7 @@ class CheckUsers:
             elif user_remove == "0":
                 break
             elif user_remove in self.login_stuff.lower_user_list:
-                self.users = self.users.drop(self.users.index[self.users['username'] == user_remove], axis=0)
+                self.users = self.users.drop(self.users.index[self.users['Username'] == user_remove], axis=0)
                 self.users.to_csv('data/users.csv', index = False)
                 print(f"{user_remove} removed.")
                 enter_to_continue()

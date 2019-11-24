@@ -1,5 +1,6 @@
 # Just utils stuff
 import shutil
+import hashlib
 from datetime import datetime
 from os import system, name
 from time import sleep
@@ -113,3 +114,7 @@ def valid_option(choice, num_of_options, option_zero = False):
             return False
     else:
         return False
+
+def hashing(secret):
+    """Hash it in sha512"""
+    return int(hashlib.sha512(secret.encode('utf-8')).hexdigest(), 16)

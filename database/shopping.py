@@ -181,14 +181,19 @@ class ShoppingCart:
                         pass
                     elif choice in items_to_remove:
                         while True:
-                            amt = input(f"How many {items_to_remove[choice]}?\n").strip()
+                            clear()
+                            print(print_banner("View Cart"))
                             print(self.cart)
-                            if valid_option(amt, len(str(self.cart.loc[1, 'Quantity'])), True):
+                            print(f"Which item do you want to remove? (0 to cancel)\n{items_to_remove[choice]}")
+                            amt = input(f"How many {items_to_remove[choice]}?\n").strip()
+                            if valid_option(amt, int(self.cart.loc[int(choice), 'Quantity']), True):
                                 amt = int(amt)
                                 break
                             else:
                                 print("Invalid input!")
                                 enter_to_continue()
+                        print(f"{amt} {items_to_remove[choice]} removed.")
+                        enter_to_continue()
                         self.removeFromCart(items_to_remove[choice], amt)
                 else:
                     enter_to_continue()
@@ -285,5 +290,6 @@ class Checkout:
             print_banner("Checkout")
             print("Thanks for shopping with the Krusty Krabz!")
             self.stock.updateActualStockCSV()
+            enter_to_continue()
         else:
             return False

@@ -42,7 +42,7 @@ class Stock:
         self.updateStockDF()
         if item in self.all_items:
             if self.getCell(item, 'Stock') - num >=0:
-                self.stock_df.loc[self.stock_df['Item'] == item, 'Stock'] -= num
+                self.changeValue(item, 'Stock', self.getCell(item, 'Stock') - num)
             else:
                 print("Too many!")
             if self.getCell(item, 'Stock') == 0:

@@ -32,6 +32,7 @@ class ChangeStock:
             display_stock.index += 1
             print(display_stock)
             while True:
+                clear()
                 print(print_banner(self.name, "Add Stock"))
                 print(display_stock)
                 choice = input("\nPick an item to add (0 to quit): ").strip()
@@ -43,7 +44,7 @@ class ChangeStock:
                     continue
                 item_name = item_dict[choice][0].capitalize()
                 amt = input(f"How many {item_name}: ")
-                if valid_option(amt, self.stock.getCell(item_name, 'Stock'), True) == False:
+                if amt.isnumeric() == False:
                     print("Invalid option!")
                     enter_to_continue()
                     continue
@@ -112,10 +113,9 @@ class ChangeStock:
                 if item_to_remove == item.lower():
                     choice = yes_or_no(f"Remove {item}?")
                     if choice:
-                        print(f"Removed {item}")
                         self.stock.removeStock(item, self.stock.getCell(item, "Stock"))
-                        self.stock.updateStockCSV()
                         self.stock.updateActualStockCSV()
+                        print(f"Removed {item}")
                         enter_to_continue()
                     else:
                         break

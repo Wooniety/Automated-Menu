@@ -1,5 +1,5 @@
 Item,Category,Price,Stock
-Tea,Drinks,2.0,44.0
+Tea,Drinks,2.0,45.0
 Chicken,Frozen Goods,2.5,20.0
 Milk,Drinks,2.5,34.0
 Wheels,Sweets,3.5,20.0
@@ -10,7 +10,6 @@ Gummy Bears,Sweets,2.5,30.0
 Gummy Worms,Sweets,2.5,27.0
 Cookies,Snacks,5.0,25.0
 Beef,Frozen Goods,7.0,17.0
-Fish,Frozen goods,4.0,15.0
 White bread,Bread,4.0,36.0
-Choco bread,Bread,5.0,0.0
-Mamee,Snacks,2.5,44.0
+Choco bread,Bread,5.0,123.0
+Mamee,Snacks,6.0,123.0

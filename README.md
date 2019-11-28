@@ -70,5 +70,5 @@ Discount Sunday is thing. Or should it be called Sunday Sales?
 
 - I wanted to learn it
 - Already puts the data into a nice table
-- Useful functions like `sum`
+- Useful functions like `sum` and 'unique()' to sort the categories
 - Reading from CSV and manipulating the data is really useful

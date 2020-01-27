@@ -99,7 +99,7 @@ class LoginRegister:
             if find_user.lower() in self.lower_user_list:
                 user_password = self.users.loc[self.users['Username'] == find_user.lower(), 'password'].values[0]
                 user_salt = self.users.loc[self.users['Username'] == find_user.lower(), 'salt'].values[0]
-                password = hashing(password.encode(), user_salt.encode()).decode()
+                password = hashing(password, user_salt)
                 if password == user_password:
                     self.username = find_user
                     self.user_type = self.users.loc[self.users['Username'] == self.username.lower(), 'account_type'].values[0]
@@ -159,9 +159,8 @@ class LoginRegister:
 
         # Update database
         user_details[0] = user_details[0].lower()
-        salt = bcrypt.gensalt()
-        user_details[1] = hashing(user_details[1].encode(), salt).decode() # Hashes the password
-        user_details[2] = salt.decode()
+        user_details[2] = bcrypt.gensalt().decode()
+        user_details[1] = hashing(user_details[1], user_details[2]) # Hashes the password
         user_details = pd.DataFrame([user_details], columns = self.users.columns)
         self.users = self.users.append(user_details, ignore_index = True)
         self.users.to_csv('data/users.csv', index=False)

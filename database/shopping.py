@@ -96,7 +96,7 @@ class ExploreAisle:
                     pass
                 else:
                     category_items[choice][2] -= amt
-                    self.cart.addItemToCart(category_items[choice][0], amt, category_items[choice][1]*amt)
+                    self.cart.addItemToCart(category_items[choice][0], amt, category_items[choice][1]*amt, get_time())
                     print(f"Added {amt} {category_items[choice][0]} to cart")
                     enter_to_continue()
             else:
@@ -146,7 +146,7 @@ class SearchItem:
                         amt = int(amt)
                         break
                 print(f"Added {amt} {choose_item} to cart")
-                self.cart.addItemToCart(choose_item, amt, self.stock.getCell(choose_item, 'Price')*amt)
+                self.cart.addItemToCart(choose_item, amt, self.stock.getCell(choose_item, 'Price')*amt, get_time())
         else:
             print("You couldn't find anything...")
         enter_to_continue()
@@ -192,7 +192,7 @@ class ShoppingCart:
                                 enter_to_continue()
                         print(f"{amt} {items_to_remove[choice]} removed.")
                         enter_to_continue()
-                        self.removeFromCart(items_to_remove[choice], amt)
+                        self.removeFromCart(items_to_remove[choice], amt, get_time())
                 else:
                     enter_to_continue()
                     break
@@ -206,8 +206,8 @@ class ShoppingCart:
     def updateToCart(self):
         self.cart.to_csv('data/cart.csv', index = False)
 
-    def addItemToCart(self, item, quantity, total_price):
-        items = [[item, quantity, total_price]]
+    def addItemToCart(self, item, quantity, total_price, time):
+        items = [[item, quantity, total_price, time]]
         self.refreshCartDF()
         if quantity == 0:
             # Don't add anything
@@ -217,6 +217,8 @@ class ShoppingCart:
             self.cart.loc[self.cart['Items'] == item, 'Quantity'] += quantity
             # Price of item in cart += price of 1 x quantity
             self.cart.loc[self.cart['Items'] == item, 'Price'] += total_price 
+            # Update time
+            self.cart.loc[self.cart['Items'] == item, 'Last Modified'] = time
         else:
             items_to_add = pd.DataFrame(items, columns = self.cart.columns)
             self.cart = self.cart.append(items_to_add, ignore_index = True)
@@ -225,7 +227,7 @@ class ShoppingCart:
         #     self.stock
         self.updateToCart()
     
-    def removeFromCart(self, item, num_of_items):
+    def removeFromCart(self, item, num_of_items, time):
         self.refreshCartDF()
         self.stock.updateStockDF()
         if item in self.items_in_cart:
@@ -234,6 +236,7 @@ class ShoppingCart:
             # Remove from cart
             self.cart.loc[self.cart['Items'] == item, 'Quantity'] -= num_of_items
             self.cart.loc[self.cart['Items'] == item, 'Price'] -= num_of_items*(self.stock.getCell(item, 'Price'))
+            self.cart.loc[self.cart['Items'] == item, 'Last Modified'] = time
             # Remove item completely from cart if 0 or less
             if self.cart.loc[self.cart['Items'] == item, 'Quantity'].values[0] <= 0:
                 self.cart = self.cart.drop(self.cart.index[self.cart['Items'] == item], axis=0)

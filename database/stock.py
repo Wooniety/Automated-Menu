@@ -2,12 +2,12 @@ import pandas as pd
 from database.utils import *
 from database.common_menu import *
 
-
 # Use the functions in Stock to mess directly with the csv. Shopping cart is seperate.
 
 class Stock: 
     def __init__(self):
         self.name = "View stock"
+        # Client side stock
         self.stock_df = pd.read_csv('data/menu.csv')
         self.all_items = self.stock_df['Item'].unique()
         self.categories = self.stock_df['Category'].unique()
@@ -15,13 +15,13 @@ class Stock:
         for category in self.categories:
             self.categories_data[category] = self.stock_df[self.stock_df['Category'] == category] 
 
-    # Create temporary menu to store items
     def readStockFromOG(self):
+        """Update client side menu.csv from stock.csv"""
         # TODO If not in stock, do not display item
         self.og_stock = pd.read_csv('data/stock.csv')
         self.og_stock.to_csv('data/menu.csv', index = False)
 
-    def updateStockDF(self): # Temp stock dataframe
+    def updateStockDF(self): # Client stock dataframe
         """Update menu dataframe from menu.csv"""
         self.all_items = self.stock_df['Item'].unique()
         self.stock_df = pd.read_csv('data/menu.csv')

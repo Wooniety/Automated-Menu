@@ -2,7 +2,8 @@
 import shutil
 import hashlib
 import bcrypt
-from datetime import datetime
+import re
+import datetime
 from os import system, name
 from time import sleep
 
@@ -61,9 +62,35 @@ def clear():
     else: 
         _ = system('clear') 
 
+def to_time(time_str):
+    """Parse string to time object. Year-Month-Day Hour:Minute:Second"""
+    return datetime.datetime.strptime(time_str, '%Y-%m-%d %H:%M:%S')
+
+def time_to_str(time_obj):
+    """Format time object to string"""
+    return datetime.datetime.strftime(time_obj, '%Y-%m-%d %H:%M:%S')
+
+def get_time():
+    """Return the current date and time"""
+    return time_to_str(datetime.datetime.now())
+
+def later_time(time, add_min):
+    """Return the time after x number of minutes"""
+    time = to_time(time)
+    return time_to_str(time + datetime.timedelta(minutes = add_min))
+
+def check_expire(time):
+    """Check if timestamp has expired"""
+    time = to_time(time).timestamp()
+    curr_time = to_time(get_time()).timestamp()
+    if curr_time > time:
+        return True
+    else:
+        return False
+
 def get_day():
     """Return the day"""
-    return datetime.today().strftime('%A')
+    return datetime.datetime.today().strftime('%A')
 
 def get_spaces(num_spaces):
     """Print spaces"""
@@ -98,7 +125,7 @@ def enter_to_continue():
 def clear_cart():
     """Empty cart"""
     cart_file = open("data/cart.csv", "w")
-    cart_file.write('"Items","Quantity","Price"')
+    cart_file.write('Items,Quantity,Price,Last Modified')
     cart_file.close()
 
 def valid_option(choice, num_of_options, option_zero = False):
@@ -116,10 +143,11 @@ def valid_option(choice, num_of_options, option_zero = False):
     else:
         return False
 
-
 def hashing(secret, salt):
-    """Hash it in bcrypt"""
-    return bcrypt.hashpw(secret, salt)
+    """Hash it in bcrypt. secret and salt in string format.\n
+    Return string"""
+    return bcrypt.hashpw(secret.encode(), salt.encode()).decode()
 
 def send_bytes(string):
     """Send bytes"""
+    pass

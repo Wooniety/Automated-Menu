@@ -35,7 +35,6 @@ def main():
     print_banner("Krusty Krabz")
     login.action()
     clear()
-    
 
     # Different menu depending on the account type
     if login.user_type == "Customer":

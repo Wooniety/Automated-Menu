@@ -4,9 +4,11 @@ You have a cart and you can run free in the confines of the CLI which hosts the 
 
 ## Prerequisites
 
-- Python 3.7 or below
+- Python 3.7 (Not 3.8)
 - Pandas
   - https://pandas.pydata.org/pandas-docs/stable/install.html
+- Bcrypt
+  - https://pypi.org/project/bcrypt/
 
 ## How to run
 
@@ -65,6 +67,11 @@ Discount Sunday is thing. Or should it be called Sunday Sales?
 - Remove items
 
 ## Misc
+
+### Woah Security
+
+We hash your password with bcrypt.  
+More to be added.
 
 ### Why Pandas?
 

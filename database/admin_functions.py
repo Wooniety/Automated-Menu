@@ -137,7 +137,7 @@ class CheckUsers:
         self.users = self.login_stuff.users
         self.users.index += 1
         self.stock = Stock()
-    
+ 
     def updateDF(self):
         self.login_stuff.update_users()
         self.users = self.login_stuff.users

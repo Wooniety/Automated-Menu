@@ -84,9 +84,9 @@ class LoginRegister:
     
     def update_users(self):
         self.users = pd.read_csv("data/users.csv")
+        self.user_list = self.users['Username'].unique()
         for user in self.user_list:
             self.lower_user_list.append(user.lower())
-        self.user_list = self.users['Username'].unique()
 
     def login(self):
         """Existing user"""
@@ -95,9 +95,11 @@ class LoginRegister:
             print(print_banner(self.name, "Login"))
             find_user = input("Username: ")
             password = getpass.getpass("Password: ") # Hides input
+            self.update_users()
             if find_user.lower() in self.lower_user_list:
                 user_password = self.users.loc[self.users['Username'] == find_user.lower(), 'password'].values[0]
-                password = str(hashing(password))
+                user_salt = self.users.loc[self.users['Username'] == find_user.lower(), 'salt'].values[0]
+                password = hashing(password.encode(), user_salt.encode()).decode()
                 if password == user_password:
                     self.username = find_user
                     self.user_type = self.users.loc[self.users['Username'] == self.username.lower(), 'account_type'].values[0]
@@ -112,7 +114,7 @@ class LoginRegister:
         """Create new account"""
         clear()
         print(print_banner(self.name, "Register"))
-        user_details = [None]*3
+        user_details = [None]*4 # username, password, salt, acc_type
         if admin:
             header = "Admin Console"
             msg = "Enter admin details"
@@ -126,6 +128,7 @@ class LoginRegister:
             print(print_banner(header, "Register"))
             print(msg)
             user_details[0] = input("Username: ").strip()
+            self.update_users()
             if user_details[0] == "":
                 print("Enter a Username!")
                 continue
@@ -144,7 +147,7 @@ class LoginRegister:
                 print("Enter a password!")
             else:
                 break
-        user_details[2] = acc_type
+        user_details[3] = acc_type
         clear()
         print(print_banner("Register"))
         print(f"Welcome {user_details[0]}!")
@@ -152,11 +155,13 @@ class LoginRegister:
 
         # Tell main program name user details
         self.username = user_details[0]
-        self.user_type = user_details[2]
+        self.user_type = user_details[3]
 
         # Update database
         user_details[0] = user_details[0].lower()
-        user_details[1] = hashing(user_details[1]) # Hashes the password
+        salt = bcrypt.gensalt()
+        user_details[1] = hashing(user_details[1].encode(), salt).decode() # Hashes the password
+        user_details[2] = salt.decode()
         user_details = pd.DataFrame([user_details], columns = self.users.columns)
         self.users = self.users.append(user_details, ignore_index = True)
         self.users.to_csv('data/users.csv', index=False)

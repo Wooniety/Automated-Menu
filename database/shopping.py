@@ -95,9 +95,8 @@ class ExploreAisle:
                 if amt == 0: # Don't add anything
                     pass
                 else:
-                    to_cart = [[category_items[choice][0], amt, category_items[choice][1]*amt]]
                     category_items[choice][2] -= amt
-                    self.cart.addItemToCart(to_cart)
+                    self.cart.addItemToCart(category_items[choice][0], amt, category_items[choice][1]*amt)
                     print(f"Added {amt} {category_items[choice][0]} to cart")
                     enter_to_continue()
             else:
@@ -136,7 +135,7 @@ class SearchItem:
                 cart = ShoppingCart()
                 while True:
                     choose_item = input("Item number: ").strip()
-                    if valid_option(choose_item, len(found_items)):
+                    if valid_option(choose_item, len(all_items)):
                         choose_item = all_items[choose_item]
                         break
                     else:
@@ -147,8 +146,7 @@ class SearchItem:
                         amt = int(amt)
                         break
                 print(f"Added {amt} {choose_item} to cart")
-                item_to_add = [choose_item, amt, self.stock.getCell(choose_item, 'Price')*amt]
-                self.cart.addItemToCart([item_to_add])
+                self.cart.addItemToCart(choose_item, amt, self.stock.getCell(choose_item, 'Price')*amt)
         else:
             print("You couldn't find anything...")
         enter_to_continue()
@@ -208,24 +206,22 @@ class ShoppingCart:
     def updateToCart(self):
         self.cart.to_csv('data/cart.csv', index = False)
 
-    def addItemToCart(self, items):
-        '''
-        items is a list [[item, quantity, total price]]
-        '''
+    def addItemToCart(self, item, quantity, total_price):
+        items = [[item, quantity, total_price]]
         self.refreshCartDF()
-        if items[0][1] == 0:
+        if quantity == 0:
             # Don't add anything
             pass
-        elif items[0][0] in self.items_in_cart:
+        elif item in self.items_in_cart:
             # No. item in cart += amt to add
-            self.cart.loc[self.cart['Items'] == items[0][0], 'Quantity'] += items[0][1]
+            self.cart.loc[self.cart['Items'] == item, 'Quantity'] += quantity
             # Price of item in cart += price of 1 x quantity
-            self.cart.loc[self.cart['Items'] == items[0][0], 'Price'] += items[0][2] 
+            self.cart.loc[self.cart['Items'] == item, 'Price'] += total_price 
         else:
             items_to_add = pd.DataFrame(items, columns = self.cart.columns)
             self.cart = self.cart.append(items_to_add, ignore_index = True)
-        self.stock.changeValue(items[0][0], 'Stock', self.stock.getCell(items[0][0], 'Stock') - items[0][1])
-        # if self.stock.getCell(items[0][0], 'Stock') <= 0:
+        self.stock.changeValue(item, 'Stock', self.stock.getCell(item, 'Stock') - quantity)
+        # if self.stock.getCell(item, 'Stock') <= 0:
         #     self.stock
         self.updateToCart()
     
@@ -278,9 +274,9 @@ class Checkout:
         total_amt = to_num(self.getTotalAmt(), True, 2)
 
         # Apply discount on discount day
-        discount_day = "Sunday"
+        discount_day = "Thursday"
         if get_day() == discount_day:
-            total_amt = to_num(total_amt*0.5, True, 2)
+            total_amt = to_num(total_amt*0.05, True, 2)
             print(f"Since today is {discount_day}, 5% off all items!")
         print(f"Your total amount is: ${total_amt}")
         choice = yes_or_no("Do you want to check out?")

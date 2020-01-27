@@ -39,6 +39,9 @@ def to_num(int_to_check, error_msg = "Invalid number! Please enter something val
                     returned_num = round(returned_num*(10**round_decimal))/(10**round_decimal)
                 return returned_num
 
+def round_off(num, no_places):
+    return round(num*(10**no_places))/(10**no_places)
+
 def yes_or_no(prompt, error_msg = None):
     """
     Prompts for Yes or No Question.\n

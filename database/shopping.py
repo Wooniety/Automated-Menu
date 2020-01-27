@@ -43,7 +43,7 @@ class ExploreAisle:
             self.cart.refreshCartDF()
             self.updateAisleData()
             
-            # Add items from a cateogory into a dictionary to refer to.
+            # Add items from a category into a dictionary to refer to.
             for i, item in enumerate(self.aisle_data.values):
                 category_items[f"{i+1}"] = [item[0], item[1], int(item[2])] #[Item, price, stock]
             clear()
@@ -132,7 +132,6 @@ class SearchItem:
                 print(f"{i+1}) {item}{get_spaces(12-len(item))} {self.stock.getCell(item, 'Price')}{get_spaces(7-len(str(self.stock.getCell(item, 'Price'))))} {self.stock.getCell(item, 'Stock')}") # Option num) item (stock)
             choice = yes_or_no("Do you want to add it to your cart?")
             if choice:
-                cart = ShoppingCart()
                 while True:
                     choose_item = input("Item number: ").strip()
                     if valid_option(choose_item, len(all_items)):
@@ -146,7 +145,7 @@ class SearchItem:
                         amt = int(amt)
                         break
                 print(f"Added {amt} {choose_item} to cart")
-                self.cart.addItemToCart(choose_item, amt, self.stock.getCell(choose_item, 'Price')*amt, get_time())
+                self.cart.addItemToCart(choose_item, amt, round_off(self.stock.getCell(choose_item, 'Price')*amt, 2), get_time())
         else:
             print("You couldn't find anything...")
         enter_to_continue()

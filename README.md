@@ -6,9 +6,13 @@ You have a cart and you can run free in the confines of the CLI which hosts the 
 
 - Python 3.7 (Not 3.8)
 - [Pandas](https://pandas.pydata.org/pandas-docs/stable/install.html)
-  - `pip install pandas`
+```bash
+pip install pandas
+```
 - [Bcrypt](https://pypi.org/project/bcrypt/)
-  - `pip install bcrypt`
+```bash
+pip install bcrypt
+```
 
 ## How to run
 

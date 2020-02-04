@@ -1,0 +1,12 @@
+Username,password,salt,account_type
+henggy,$2b$12$ebyjPgVdoxI.RUdbOoPRW.lJ8ewurfzIfGQqZamKABe1gMvZdHgV6,$2b$12$ebyjPgVdoxI.RUdbOoPRW.,Customer
+admin,$2b$12$BjZZST.1qhtizMITr.A38eHaQSyz7eDLaWzc5uvqdF/v.HHe7cU8S,$2b$12$BjZZST.1qhtizMITr.A38e,Admin
+trash racoon,$2b$12$9b/VUQLbchOstBqIJJqayukc856W6lfwpLIhX2Pn0x4ccJfYICEwy,$2b$12$9b/VUQLbchOstBqIJJqayu,Customer
+donut lord,$2b$12$Ux0e.Uxd4dwJgYW0m5S1qeemdnZbKt5HLUYPHYKjto7N9YUqTzDlO,$2b$12$Ux0e.Uxd4dwJgYW0m5S1qe,Customer
+bob,$2b$12$pQQ/dE29HuDLUdWZo7cdkuKi3U3jZAxqTjwWTCATtEdqh8ho6PFgW,$2b$12$pQQ/dE29HuDLUdWZo7cdku,Customer
+wooniety,$2b$12$NPHGcaoMmKOT9bcJGcAARuUyGQjjTcF03tBCu10Tfnhe088mSHsMe,$2b$12$NPHGcaoMmKOT9bcJGcAARu,Admin
+techlead,$2b$12$hdrF8Jpg8OOQRCXiZ6YY6OXhnM7fIQTZzsGMjrQWFYIJBXZP7m7Ny,$2b$12$hdrF8Jpg8OOQRCXiZ6YY6O,Admin
+murder log,$2b$12$ZsagK9BuEStvC0.I0QpaDeR1qyi72/pqHjNf06CRM1VmM4i9hahlS,$2b$12$ZsagK9BuEStvC0.I0QpaDe,Admin
+i_need_names,$2b$12$5ZqcWkenVY5uRZMWOQzIzuW/fa7sP8OTtg6PN7A.o1VkjUwOCCyDe,$2b$12$5ZqcWkenVY5uRZMWOQzIzu,Customer
+bakkwa,$2b$12$w2f1O4uMWvSaaqA01UDfJewnBrzD2waZLlXACCbLrjiilDMXFaYc6,$2b$12$w2f1O4uMWvSaaqA01UDfJe,Admin
+sushi_goer,$2b$12$nXAYGu0btSILCdr42R0BOevImvrwf4AHfucMk9d0gQehQhg6yvydK,$2b$12$nXAYGu0btSILCdr42R0BOe,Customer

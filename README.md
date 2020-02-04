@@ -2,6 +2,8 @@
 
 You have a cart and you can run free in the confines of the CLI which hosts the Krusty Krabz
 
+Also now we have a client-server thing going on.
+
 ## Prerequisites
 
 - Python 3.7 (Not 3.8)
@@ -12,18 +14,23 @@ You have a cart and you can run free in the confines of the CLI which hosts the 
 
 ## How to run
 
-If cloning from Github
+
+1) Clone from Github
 
 ``` bash
 git clone https://github.com/Wooniety/SPAM-Menu
-cd SPAM-Menu
-python main.py
 ```
 
-If already cloned:
+2) Start the server (Localhost)
+
+```bash
+python {directory_to_folder}/SPAM-Menu/server/main.py
+```
+
+3) Start the main program
 
 ``` bash
-python {directory_to_folder}/SPAM-Menu/main.py
+python {directory_to_folder}/SPAM-Menu/client/main.py
 ```
 
 ## Features
@@ -66,12 +73,14 @@ Discount Sunday is thing. Or should it be called Sunday Sales?
 - Add more items
 - Remove items
 
+### Some security
+
+#### Your passwords are somewhat safe
+
+Hashed and salted with bcrypt.
+> If you want to try using the sample accounts here, the passwords are the username.
+
 ## Misc
-
-### Woah Security
-
-We hash your password with bcrypt.  
-More to be added.
 
 ### Why Pandas?
 

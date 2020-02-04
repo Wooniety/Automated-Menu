@@ -29,7 +29,7 @@ class Stock:
         for category in self.categories_data:
             self.categories_data[category] = self.stock_df[self.stock_df['Category'] == category] 
 
-    def updateStockCSV(self): # Updata temp stock. Updated to main stock when checking out.
+    def updateStockCSV(self): # Updated temp stock. Updated to main stock when checking out.
         self.stock_df.to_csv('data/menu.csv', index = False)
     
     def updateActualStockCSV(self): 

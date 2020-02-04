@@ -7,10 +7,14 @@ Also now we have a client-server thing going on.
 ## Prerequisites
 
 - Python 3.7 (Not 3.8)
-- Pandas
-  - https://pandas.pydata.org/pandas-docs/stable/install.html
-- Bcrypt
-  - https://pypi.org/project/bcrypt/
+- [Pandas](https://pandas.pydata.org/pandas-docs/stable/install.html)
+```bash
+pip install pandas
+```
+- [Bcrypt](https://pypi.org/project/bcrypt/)
+```bash
+pip install bcrypt
+```
 
 ## How to run
 

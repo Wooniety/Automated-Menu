@@ -28,9 +28,8 @@ class LoginRegister:
             if password == user_password:
                 self.username = find_user
                 self.user_type = self.users.loc[self.users['Username'] == self.username.lower(), 'account_type'].values[0]
-                print(f"{self.username} logged in")
                 return self.user_type
-        print(f"Invalid login attempt at {find_user}")
+        print(f"{get_time()} - 200 Invalid login attempt at {find_user}")
         return '-1'
 
     def register(self, username, password, acc_type):

@@ -10,4 +10,5 @@ All of this stuff is sent from the client
 `111` - Get Daily Menu  
 `112` - Get File  
 `120` - Send File  
+`130` - Remove User  
 `180` - Close Server  

@@ -20,7 +20,6 @@ class Server:
         self.conn, self.addr = self.server.accept()
         self.ip = str(self.addr[0])
         self.port = str(self.addr[1])
-        print(f"Connection from {self.ip} at port {self.port}")
 
     def close_conn(self):
         self.conn.close()
@@ -35,15 +34,16 @@ class Server:
             buf = -1
         return buf[:3], buf[4:] # 100, msg
     
-    def recv_file(self, filename, BUFF_LENGTH):
-        in_file = open(filename,"wb")
+    def recv_file(self, filename, BUFF_LENGTH, min_len = 0):
         file_bytes = b''
         while True:
             file_bytes += self.conn.recv(BUFF_LENGTH)
             if len(file_bytes) > 0:
                 break
-        in_file.write(file_bytes)
-        in_file.close()
+        if len(file_bytes) > min_len:
+            in_file = open(filename,"wb")
+            in_file.write(file_bytes)
+            in_file.close()
 
     def send_string(self, msg):
         """send(string)"""

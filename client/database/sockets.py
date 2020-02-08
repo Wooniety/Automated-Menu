@@ -1,6 +1,8 @@
 import socket
 import threading
 
+from database.utils import enter_to_continue
+
 #TODO secure the connection. Maybe SSL tunneling
 
 class Client:

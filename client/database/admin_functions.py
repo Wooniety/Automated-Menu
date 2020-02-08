@@ -6,7 +6,7 @@ from database.stock import *
 from database.sockets import Client
 
 class ChangeStock:
-    def __init__(self, socket):
+    def __init__(self):
         self.socket = socket
         self.name = "Modify Stock"
         self.stock = Stock()
@@ -140,26 +140,30 @@ class CheckUsers:
         self.login_stuff.getUsers()
         self.users = self.login_stuff.users
         self.users.index += 1
-        self.stock = Stock() 
 
-    def viewAllUsers(self, show_index = True):
+    def update_users(self):
+        self.socket.send_string('112', 'users.csv')
+        self.socket.recv_file('users.csv', 4096)
+        self.socket.close_conn()
+
+    def viewAllUsers(self, show_index = True, once = True):
+        if once:
+            self.update_users()
         print((self.users[['Username','account_type']]).to_string(index = show_index))
         enter_to_continue()
     
     def addAdmin(self):
         self.login_stuff.register(True)
+        self.socket.send_string('101', f"{self.login_stuff.username}/{self.login_stuff.password}/{self.login_stuff.user_type}")
+        self.socket.close_conn()
     
     def removeUser(self):
         while True:
             clear()
             print(print_banner(self.name, "Remove User"))
-            self.viewAllUsers(False)
+            self.viewAllUsers(False, False)
             user_remove = input("Enter name of user to remove (0 to cancel): ").strip().lower()
             if user_remove != '0':
-                try:
-                    self.socket.start_conn()
-                except:
-                    pass
                 self.socket.send_string("130", f"{self.current_user}/{user_remove}")
                 self.socket.close_conn()
                 print(f"{user_remove} removed.")

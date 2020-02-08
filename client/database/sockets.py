@@ -10,6 +10,9 @@ class Client:
         self.host = host
         self.port = port
         self.client.connect((self.host, self.port))
+    
+    def start_conn(self):
+        self.client.connect((self.host, self.port))
 
     def close_conn(self):
         self.client.close()

@@ -6,7 +6,8 @@ from database.stock import *
 from database.sockets import Client
 
 class ChangeStock:
-    def __init__(self):
+    def __init__(self, socket):
+        self.socket = socket
         self.name = "Modify Stock"
         self.stock = Stock()
     
@@ -131,7 +132,8 @@ class ChangeStock:
         return False
 
 class CheckUsers:
-    def __init__(self, current_user):
+    def __init__(self, current_user, socket):
+        self.socket = socket
         self.current_user = current_user
         self.name = "Check Users"
         self.login_stuff = LoginRegister()
@@ -153,11 +155,16 @@ class CheckUsers:
             print(print_banner(self.name, "Remove User"))
             self.viewAllUsers(False)
             user_remove = input("Enter name of user to remove (0 to cancel): ").strip().lower()
-            client = Client(self.HOST, self.PORT)
-            client.send_string("130", user_remove)
-            client.close_conn()
-            # FIXME send remove to server
-            print(f"{user_remove} removed.")
+            if user_remove != '0':
+                try:
+                    self.socket.start_conn()
+                except:
+                    pass
+                self.socket.send_string("130", user_remove)
+                self.socket.close_conn()
+                print(f"{user_remove} removed.")
+            else:
+                break
             enter_to_continue()
     
     def action(self):

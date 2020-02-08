@@ -136,48 +136,20 @@ class CheckUsers:
         self.login_stuff = LoginRegister()
         self.users = self.login_stuff.users
         self.users.index += 1
-        self.stock = Stock()
  
     def updateDF(self):
         self.login_stuff.update_users()
         self.users = self.login_stuff.users
 
-    def viewAllUsers(self, show_index = True):
-        self.updateDF()
-        print((self.users[['Username','account_type']]).to_string(index = show_index))
-        enter_to_continue()
-    
     def addAdmin(self):
         self.updateDF()
         self.login_stuff.register(True)
         self.updateDF()
     
-    def removeUser(self):
+    def removeUser(self, user_remove):
         self.updateDF()
-        while True:
-            clear()
-            print(print_banner(self.name, "Remove User"))
-            self.updateDF()
-            self.viewAllUsers(False)
-            user_remove = input("Enter name of user ot remove (0 to cancel): ").strip().lower()
-            if self.current_user.lower() == user_remove:
-                print("You can't remove yourself!")
-                enter_to_continue()
-            elif user_remove == "0":
-                break
-            elif user_remove in self.login_stuff.lower_user_list:
-                self.users = self.users.drop(self.users.index[self.users['Username'] == user_remove], axis=0)
-                self.users.to_csv('data/users.csv', index = False)
-                print(f"{user_remove} removed.")
-                enter_to_continue()
-                break
-            else:
-                print("User does not exist!")
-                enter_to_continue()
-        
-    def action(self):
-        menu = MenuFunctions("View all users", self.viewAllUsers, "Add admin", self.addAdmin, "Remove user", self.removeUser)
-        self.updateDF()
-        menu.show_functions(self.name)
-        self.updateDF()
-        return False
+        if self.current_user.lower() == user_remove:
+            pass
+        elif user_remove in self.login_stuff.lower_user_list:
+            self.users = self.users.drop(self.users.index[self.users['Username'] == user_remove], axis=0)
+            self.users.to_csv('data/users.csv', index = False)

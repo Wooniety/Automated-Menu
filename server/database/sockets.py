@@ -29,7 +29,7 @@ class Server:
         NUM_MSG - 100_serverstuff
         returns code num and string"""
         buf = self.conn.recv(BUFF_LENGTH)
-        buf = buf.decode()
+        buf = str(buf.decode())
         if len(buf) == 0:
             buf = -1
         return buf[:3], buf[4:] # 100, msg

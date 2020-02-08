@@ -53,7 +53,10 @@ def client_thread(code, BUFF_LENGTH = 4096):
     elif code == '120':
         server.recv_file(f'data/{msg}', BUFF_LENGTH)
     elif code == '130':
-        pass    
+        # admin/user_to_remove
+        msg = msg.split('/')
+        user_stuff = CheckUsers(msg[0])    
+        user_stuff.removeUser(msg[1])
     elif code == '180':
         shut_server = True
 

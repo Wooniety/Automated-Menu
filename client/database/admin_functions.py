@@ -160,7 +160,7 @@ class CheckUsers:
                     self.socket.start_conn()
                 except:
                     pass
-                self.socket.send_string("130", user_remove)
+                self.socket.send_string("130", f"{self.current_user}/{user_remove}")
                 self.socket.close_conn()
                 print(f"{user_remove} removed.")
             else:

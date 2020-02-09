@@ -21,7 +21,7 @@ msg = "firck"
 
 client = Client(HOST, PORT)
 client.start_conn()
-client.send_string("111", "msg")
+client.send_string("180", "hah")
 
 """
 

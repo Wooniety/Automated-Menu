@@ -20,10 +20,13 @@ while True:
     server.start_conn()
     try:
         threading.Thread(target=server.start_thread).start()
+        if server.code == '180':
+            break
     except:
         print("Oops! Something went wrong!")
-        #traceback.print_exc()
-        server.close_conn
+        traceback.print_exc()
+        server.close_conn()
+server.close_server()
 
 # Receive connection type
 # 1) Login
@@ -31,5 +34,4 @@ while True:
 # 3) Checkout
 # dict of those functions
 
-Server.close_conn
 #print("Server stopped")

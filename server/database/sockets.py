@@ -14,6 +14,10 @@ class Server:
             sys.exit()
         self.server.listen(no_conns)
         print("Listening...")
+
+        # Other things
+        self.code = ''
+        self.msg = ''
     
     def start_conn(self):
         self.conn, self.addr = self.server.accept()
@@ -23,8 +27,8 @@ class Server:
 
     def start_thread(self, BUFF_LENGTH = 4096):
         print("Connection receieved!")
-        msg = self.recieve_string(BUFF_LENGTH)
-        print(msg)
+        self.code, self.msg = self.recieve_string(BUFF_LENGTH)
+        print(self.msg)
         self.close_conn()
     
     def close_conn(self):

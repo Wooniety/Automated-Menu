@@ -76,7 +76,7 @@ def main():
         client.send_string("112", 'users.csv')
         client.recv_file('data/users.csv', BUFF_LENGTH)
         client.close_conn()
-        admin_menu = (CheckUsers(login.username, Client(HOST, PORT)), ChangeStock(Client(HOST, PORT)))
+        admin_menu = (CheckUsers(login.username, Client(HOST, PORT)), ChangeStock(), CloseServer(Client(HOST, PORT)))
         msg = f"Welcome back boss..."
         main_menu = Menu(msg, "0", LeaveMall())
         for i, option in enumerate(admin_menu):

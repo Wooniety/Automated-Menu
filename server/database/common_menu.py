@@ -1,5 +1,7 @@
 import pandas as pd
 import getpass
+import traceback
+
 from database.utils import *
 
 class Menu:

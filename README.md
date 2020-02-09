@@ -18,7 +18,6 @@ pip install bcrypt
 
 ## How to run
 
-
 1) Clone from Github
 
 ``` bash

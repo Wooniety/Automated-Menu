@@ -150,7 +150,3 @@ def hashing(secret, salt):
     """Hash it in bcrypt. secret and salt in string format.\n
     Return string"""
     return bcrypt.hashpw(secret.encode(), salt.encode()).decode()
-
-def send_bytes(string):
-    """Send bytes"""
-    pass

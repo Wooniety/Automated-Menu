@@ -19,10 +19,12 @@ class Server:
         self.conn, self.addr = self.server.accept()
         self.ip = str(self.addr[0])
         self.port = str(self.addr[1])
-        print(f"Connection from {Server.ip} at port {Server.port}")
+        print(f"Connection from {self.ip} at port {self.port}")
 
     def start_thread(self, BUFF_LENGTH = 4096):
+        print("Connection receieved!")
         msg = self.recieve_string(BUFF_LENGTH)
+        print(msg)
         self.close_conn()
     
     def close_conn(self):

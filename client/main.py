@@ -13,6 +13,17 @@ from database.common_menu import *
 from database.stock import *
 from database.shopping import *
 from database.admin_functions import *
+from database.sockets import Client
+
+HOST = "localhost"
+PORT = 8039
+msg = "firck"
+
+client = Client(HOST, PORT)
+client.start_conn()
+client.send_string("111", "msg")
+
+"""
 
 # Leave Mall
 class LeaveMall:
@@ -52,6 +63,7 @@ def main():
         for i, option in enumerate(admin_menu):
             main_menu.add_menu(f"{i+1}", option)
        
+    # Send server request for 
     logout = False
     while logout == False:
         choice = main_menu.show_menu()
@@ -63,9 +75,9 @@ def main():
     if choice:
         exit(0)
 
-
 clear()
 
 # Main loop
 while True:
     main()
+"""

@@ -14,16 +14,16 @@ from database.sockets import Server
 HOST = "localhost"
 PORT = 8039
 print(f"SPAM server started at {HOST} at port {PORT}")
-Server(HOST, PORT)
+server = Server(HOST, PORT)
 
 while True:
-    Server.start_conn
+    server.start_conn()
     try:
-        threading.Thread(target=Server.start_thread)
+        threading.Thread(target=server.start_thread).start()
     except:
         print("Oops! Something went wrong!")
         #traceback.print_exc()
-        Server.close_conn
+        server.close_conn
 
 # Receive connection type
 # 1) Login
@@ -31,5 +31,5 @@ while True:
 # 3) Checkout
 # dict of those functions
 
-#Server.close_conn
+Server.close_conn
 #print("Server stopped")

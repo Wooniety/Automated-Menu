@@ -20,6 +20,7 @@ class Client:
         101 - New User\n
         102 - Login\n
         105 - Checkout\n
+        111 - Get Daily Menu\n
         180 - Close Server"""
         self.client.send(f"{code_num}_{msg}".encode())
     
@@ -30,6 +31,16 @@ class Client:
         while file_bytes != b'':
             self.client.send(file_bytes)
             file_bytes = out_file.read(1024) # read next block from file
+    
+    def recv_file(self, filename, BUFF_LENGTH):
+        in_file = open(filename,"wb")
+        while True:
+            file_bytes = self.client.recv(BUFF_LENGTH)
+            if file_bytes == b'':
+                break
+            else:
+                in_file.write(file_bytes)
+
     
     def recv_string(self, BUFF_LENGTH):
         msg = self.client.recv(BUFF_LENGTH).decode()

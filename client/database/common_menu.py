@@ -76,18 +76,7 @@ class MenuFunctions:
 class LoginRegister:
     def __init__(self):
         self.name = "Login/Register"
-        self.users = pd.read_csv("data/users.csv")
-        self.user_list = self.users['Username'].unique()
-        self.lower_user_list = []
-        for user in self.user_list:
-            self.lower_user_list.append(user.lower())
     
-    def update_users(self):
-        self.users = pd.read_csv("data/users.csv")
-        self.user_list = self.users['Username'].unique()
-        for user in self.user_list:
-            self.lower_user_list.append(user.lower())
-
     def user_login(self):
         """Existing user"""
         clear()
@@ -139,7 +128,7 @@ class LoginRegister:
         # Tell main program name user details
         self.username = user_details[0]
         self.password = user_details[1]
-        self.acc_type = acc_type
+        self.user_type = acc_type
 
     def action(self):
         self.update_users()

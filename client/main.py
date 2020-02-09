@@ -44,20 +44,26 @@ def main():
         choice = login.action()
         client = Client(HOST, PORT)
         if choice == 0:
-            client.send_string('101', f"{login.username}/{login.password}/{login.acc_type}")
+            client.send_string('101', f"{login.username}/{login.password}/{login.user_type}")
             break
         elif choice == 1:
             # Verify user
             client.send_string('102', f"{login.username}/{login.password}")
             check = client.recv_string(1024)
-            if check == 0:
-                break
-            else:
+            if check != '1':
                 print("Invalid credentials!")
+            else:
+                login.user_type = check
+                break
         client.close_conn()
         enter_to_continue()
-    
     clear()
+
+    # Get the menu of the day
+    client = Client(HOST, PORT)
+    client.send_string("111", get_day().lower())
+    client.recv_file('data/day_items.csv')
+    client.close_conn()
 
     # Different menu depending on the account type
     if login.user_type == "Customer":

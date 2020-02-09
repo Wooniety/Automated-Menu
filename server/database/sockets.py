@@ -35,9 +35,15 @@ class Server:
             buf = -1
         return buf[:3], buf[4:] # 100, msg
     
-    def recieve_file(self, dest_file, BUFF_LENGTH):
-        recv_file = self.conn.recv(BUFF_LENGTH)
-        dest_file.write(recv_file)
+    def recv_file(self, filename, BUFF_LENGTH):
+        in_file = open(filename,"wb")
+        while True:
+            file_bytes = self.server.recv(BUFF_LENGTH)
+            if file_bytes == b'':
+                break
+            else:
+                in_file.write(file_bytes)
+
 
     def send_string(self, msg):
         """send(string)"""

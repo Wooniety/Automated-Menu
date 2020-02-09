@@ -17,13 +17,7 @@ from database.sockets import Client
 
 HOST = "localhost"
 PORT = 8039
-msg = "firck"
 
-client = Client(HOST, PORT)
-client.start_conn()
-client.send_string("180", "hah")
-
-"""
 
 # Leave Mall
 class LeaveMall:
@@ -46,7 +40,23 @@ def main():
     clear_cart()
     clear()
     print_banner("Krusty Krabz")
-    login.action()
+    while True:
+        choice = login.action()
+        client = Client(HOST, PORT)
+        if choice == 0:
+            client.send_string('101', f"{login.username}/{login.password}/{login.acc_type}")
+            break
+        elif choice == 1:
+            # Verify user
+            client.send_string('102', f"{login.username}/{login.password}")
+            check = client.recv_string(1024)
+            if check == 0:
+                break
+            else:
+                print("Invalid credentials!")
+        client.close_conn()
+        enter_to_continue()
+    
     clear()
 
     # Different menu depending on the account type
@@ -80,4 +90,3 @@ clear()
 # Main loop
 while True:
     main()
-"""

@@ -1,3 +1,4 @@
+# Stuff I actually need
 import sys
 import socket
 import threading
@@ -15,22 +16,12 @@ class Server:
         self.server.listen(no_conns)
         print("Listening...")
 
-        # Other things
-        self.code = ''
-        self.msg = ''
-    
     def start_conn(self):
         self.conn, self.addr = self.server.accept()
         self.ip = str(self.addr[0])
         self.port = str(self.addr[1])
         print(f"Connection from {self.ip} at port {self.port}")
 
-    def start_thread(self, BUFF_LENGTH = 4096):
-        print("Connection receieved!")
-        self.code, self.msg = self.recieve_string(BUFF_LENGTH)
-        print(self.msg)
-        self.close_conn()
-    
     def close_conn(self):
         self.conn.close()
     
@@ -40,16 +31,18 @@ class Server:
         returns code num and string"""
         buf = self.conn.recv(BUFF_LENGTH)
         buf = buf.decode()
+        if len(buf) == 0:
+            buf = -1
         return buf[:3], buf[4:] # 100, msg
     
     def recieve_file(self, dest_file, BUFF_LENGTH):
         recv_file = self.conn.recv(BUFF_LENGTH)
         dest_file.write(recv_file)
 
-    def send(self, msg):
+    def send_string(self, msg):
         """send(string)"""
         msg_bytes = msg.encode()
-        self.conn.sendall(msg_bytes)
+        self.conn.send(msg_bytes)
 
     def close_server(self):
         self.server.close()

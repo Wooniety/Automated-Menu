@@ -16,11 +16,21 @@ PORT = 8039
 print(f"SPAM server started at {HOST} at port {PORT}")
 server = Server(HOST, PORT)
 
+def client_thread(code, BUFF_LENGTH = 4096):
+    print("Connection receieved!")
+    code, msg = server.recieve_string(BUFF_LENGTH)
+    print(f"{code} {msg}")
+    server.send_string("0")
+    
+
 while True:
     server.start_conn()
     try:
-        threading.Thread(target=server.start_thread).start()
-        if server.code == '180':
+        code = 0
+        threading.Thread(target=client_thread, args=(code, 4096)).start()
+        if code == '180':
+            server.close_conn()
+            print(f"Connection closed with {server.ip}")
             break
     except:
         print("Oops! Something went wrong!")

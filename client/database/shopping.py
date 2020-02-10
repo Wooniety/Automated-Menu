@@ -283,7 +283,6 @@ class Checkout:
         print(f"Your total amount is: ${total_amt}")
         choice = yes_or_no("Do you want to check out?")
         if choice:
-            clear_cart()
             clear()
             print_banner("Checkout")
             print("Thanks for shopping with the Krusty Krabz!")

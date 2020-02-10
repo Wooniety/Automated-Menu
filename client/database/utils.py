@@ -67,11 +67,11 @@ def clear():
 
 def to_time(time_str):
     """Parse string to time object. Year-Month-Day Hour:Minute:Second"""
-    return datetime.datetime.strptime(time_str, '%Y-%m-%d %H:%M:%S')
+    return datetime.datetime.strptime(time_str, '%d/%m/%Y %H-%M-%S');
 
 def time_to_str(time_obj):
     """Format time object to string"""
-    return datetime.datetime.strftime(time_obj, '%Y-%m-%d %H:%M:%S')
+    return datetime.datetime.strftime(time_obj, '%d-%m-%Y %H-%M-%S')
 
 def get_time():
     """Return the current date and time"""

@@ -134,10 +134,11 @@ class CheckUsers:
         self.current_user = current_user
         self.name = "Check Users"
         self.login_stuff = LoginRegister()
+        self.login_stuff.getUsers()
         self.users = self.login_stuff.users
         self.users.index += 1
         self.stock = Stock()
- 
+
     def updateDF(self):
         self.login_stuff.update_users()
         self.users = self.login_stuff.users

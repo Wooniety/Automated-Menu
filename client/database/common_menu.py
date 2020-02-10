@@ -131,7 +131,6 @@ class LoginRegister:
         self.user_type = acc_type
 
     def action(self):
-        self.update_users()
         clear()
         print(print_banner(self.name))
         choice = yes_or_no("Is this your first time here?")
@@ -146,3 +145,10 @@ class LoginRegister:
         # If user cancels, return 1
         #if choice == 0: 
         #    break
+    
+    def getUsers(self):
+        self.users = pd.read_csv("data/users.csv")
+        self.user_list = self.users['Username'].unique()
+        self.lower_user_list = []
+        for user in self.user_list:
+            self.lower_user_list.append(user.lower())

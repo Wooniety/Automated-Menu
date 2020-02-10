@@ -77,6 +77,9 @@ def get_time():
     """Return the current date and time"""
     return time_to_str(datetime.datetime.now())
 
+def get_date():
+    return datetime.date.strftime(datetime.datetime.now(), '%d-%m-%Y')
+
 def later_time(time, add_min):
     """Return the time after x number of minutes"""
     time = to_time(time)

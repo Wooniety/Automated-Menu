@@ -1,5 +1,6 @@
 # Import stuff
 import os
+import time
 import pandas as pd
 import socket
 
@@ -17,7 +18,7 @@ from database.sockets import Client
 
 HOST = "localhost"
 PORT = 8039
-
+BUFF_LENGTH = 1024
 
 # Leave Mall
 class LeaveMall:
@@ -26,8 +27,6 @@ class LeaveMall:
     
     def action(self):
         return True
-
-# Initial connect to server
 
 # Create temp menu for cart to refer to 
 stock = Stock()
@@ -49,8 +48,8 @@ def main():
         elif choice == 1:
             # Verify user
             client.send_string('102', f"{login.username}/{login.password}")
-            check = client.recv_string(1024)
-            if check != '1':
+            check = client.recv_string(BUFF_LENGTH)
+            if check == '-1':
                 print("Invalid credentials!")
             else:
                 login.user_type = check
@@ -62,7 +61,7 @@ def main():
     # Get the menu of the day
     client = Client(HOST, PORT)
     client.send_string("111", get_day().lower())
-    client.recv_file('data/day_items.csv')
+    client.recv_file('data/day_items.csv', BUFF_LENGTH)
     client.close_conn()
 
     # Different menu depending on the account type
@@ -73,6 +72,10 @@ def main():
         for i, option in enumerate(customer_menu):
             main_menu.add_menu(f"{i+1}", option)
     elif login.user_type == "Admin":
+        client = Client(HOST, PORT)
+        client.send_string("112", 'users.csv')
+        client.recv_file('data/users.csv', BUFF_LENGTH)
+        client.close_conn()
         admin_menu = (CheckUsers(login.username), ChangeStock())
         msg = f"Welcome back boss..."
         main_menu = Menu(msg, "0", LeaveMall())
@@ -84,8 +87,20 @@ def main():
     while logout == False:
         choice = main_menu.show_menu()
         logout = main_menu.options[choice].action()
+
+    # Send server back all the things
+    client = Client(HOST, PORT)
+    if login.user_type == 'Customer':
+        client.send_string('105', f"{login.username}_{get_time()}")
+        time.sleep(1)
+        client.send_file('data/cart.csv', BUFF_LENGTH)
+    client.close_conn()
+
     clear_cart()
     clear()
+
+
+
     print(print_banner("Exit"))
     choice = yes_or_no("Exit completely?")
     if choice:

@@ -37,18 +37,27 @@ class Server:
     
     def recv_file(self, filename, BUFF_LENGTH):
         in_file = open(filename,"wb")
+        file_bytes = b''
         while True:
-            file_bytes = self.server.recv(BUFF_LENGTH)
-            if file_bytes == b'':
+            file_bytes += self.conn.recv(BUFF_LENGTH)
+            if len(file_bytes) > 0:
                 break
-            else:
-                in_file.write(file_bytes)
-
+        in_file.write(file_bytes)
+        in_file.close()
 
     def send_string(self, msg):
         """send(string)"""
         msg_bytes = msg.encode()
         self.conn.send(msg_bytes)
+
+    def send_file(self, filename, BUFF_LENGTH):
+        """Read the file at chunks at a time"""
+        out_file = open(filename,"rb")
+        file_bytes = out_file.read(1024) 
+        while file_bytes != b'':
+            self.conn.send(file_bytes)
+            file_bytes = out_file.read(1024) # read next block from file
+        self.conn.send(b'')
 
     def close_server(self):
         self.server.close()

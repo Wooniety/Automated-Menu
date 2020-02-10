@@ -16,31 +16,32 @@ class Client:
     
     def send_string(self, code_num, msg):
         """Send short strings\n
-        100 - Client Start\n
         101 - New User\n
         102 - Login\n
         105 - Checkout\n
         111 - Get Daily Menu\n
+        112 - Get File\n
+        120 - Send File\n
         180 - Close Server"""
         self.client.send(f"{code_num}_{msg}".encode())
     
-    def send_file(self, code_num, filename, BUFF_LENGTH):
+    def send_file(self, filename, BUFF_LENGTH):
         """Read the file at chunks at a time"""
         out_file = open(filename,"rb")
         file_bytes = out_file.read(1024) 
         while file_bytes != b'':
             self.client.send(file_bytes)
             file_bytes = out_file.read(1024) # read next block from file
+        self.client.send(b'')
     
     def recv_file(self, filename, BUFF_LENGTH):
         in_file = open(filename,"wb")
+        file_bytes = b''
         while True:
-            file_bytes = self.client.recv(BUFF_LENGTH)
-            if file_bytes == b'':
+            file_bytes += self.client.recv(BUFF_LENGTH)
+            if len(file_bytes) > 0:
                 break
-            else:
-                in_file.write(file_bytes)
-
+        in_file.write(file_bytes)
     
     def recv_string(self, BUFF_LENGTH):
         msg = self.client.recv(BUFF_LENGTH).decode()

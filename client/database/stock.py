@@ -7,15 +7,33 @@ from database.common_menu import *
 class Stock: 
     def __init__(self):
         self.name = "View stock"
+        self.og_stock = pd.read_csv('data/stock.csv')
+        stock_csv = open('data/menu.csv', 'w')
+        stock_csv.write('Item,Category,Price,Stock')
+        stock_csv.close()
+
         # Client side stock
         self.stock_df = pd.read_csv('data/menu.csv')
+
+        # Daily items
+        daily_items = open('data/day_items.csv', 'r').read().split(',')
+        for index, row in self.og_stock.iterrows():
+            # items_to_add = pd.DataFrame(items, columns = self.cart.columns)
+            if row.values[0] in daily_items:
+                self.stock_df = self.stock_df.append(row, ignore_index = True)
+
         self.all_items = self.stock_df['Item'].unique()
         self.categories = self.stock_df['Category'].unique()
         self.categories_data = {}
         for category in self.categories:
             self.categories_data[category] = self.stock_df[self.stock_df['Category'] == category] 
+        self.stock_df.to_csv('data/menu.csv', index = False)
+        
 
     def readStockFromOG(self):
+        # Client side stock
+        self.stock_df = pd.read_csv('data/menu.csv')
+        self.all_items = self.stock_df['Item'].unique()
         """Update client side menu.csv from stock.csv"""
         # TODO If not in stock, do not display item
         self.og_stock = pd.read_csv('data/stock.csv')

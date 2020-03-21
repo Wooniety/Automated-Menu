@@ -7,7 +7,6 @@ from database.sockets import Client
 
 class ChangeStock:
     def __init__(self):
-        self.socket = socket
         self.name = "Modify Stock"
         self.stock = Stock()
     
@@ -173,5 +172,21 @@ class CheckUsers:
     
     def action(self):
         menu = MenuFunctions("View all users", self.viewAllUsers, "Add admin", self.addAdmin, "Remove user", self.removeUser)
+        menu.show_functions(self.name)
+        return False
+
+class CloseServer:
+    def __init__(self, socket):
+        self.name = "Close Server"
+        self.socket = socket
+
+    def close(self):
+        self.socket.send_string('180', "Closing Server")
+        self.socket.close_conn()
+        print("Closing server")
+        exit()
+    
+    def action(self):
+        menu = MenuFunctions("Close Server", self.close)
         menu.show_functions(self.name)
         return False

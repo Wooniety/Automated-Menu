@@ -1,0 +1,6 @@
+# Not Important
+.gitattributes
+.vscode
+test
+__pycache__
+logs

@@ -6,7 +6,7 @@ from database.stock import *
 
 class ChangeStock:
     def __init__(self):
-        self.name = "Modify Stock"
+        self.name = "Stock"
         self.stock = Stock()
     
     def viewStock(self):

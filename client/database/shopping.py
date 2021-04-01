@@ -276,7 +276,7 @@ class Checkout:
         total_amt = to_num(self.getTotalAmt(), True, 2)
 
         # Apply discount on discount day
-        discount_day = "Thursday"
+        discount_day = "Tuesday"
         if get_day() == discount_day:
             total_amt = to_num(total_amt*0.05, True, 2)
             print(f"Since today is {discount_day}, 5% off all items!")
